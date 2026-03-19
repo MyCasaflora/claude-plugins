@@ -5,12 +5,13 @@ description: |
   aufgerufen. Bewertet Quellenanzahl, Quellenkonsistenz, Aktualität und
   Rechtsverbindlichkeit. Gibt einen Confidence-Score 0-100 mit detaillierter
   Begründung aus.
-model: opus
+model: sonnet
 tools:
   - Read
   - Grep
   - Glob
   - Bash
+  - Agent
 ---
 
 # Validator Agent

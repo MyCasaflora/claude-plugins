@@ -64,11 +64,16 @@ flowchart TD
 
 **Was**: Eigenständige Recherche — NICHT nur User-Unterlagen verwenden.
 
+- [ ] Forensische Vor-Ermittlung (lies `references/forensik-digitaler-fussabdruck.md`):
+      Analytics-ID Reverse-Lookup, SSL-Zertifikat-Historie, PDF-Metadaten, Wayback Machine
 - [ ] Regulatorische Warnungen prüfen (BaFin, FMA, FINMA, ESMA, SEC, IOSCO)
+- [ ] Website-Trust-Check: ScamAdviser + ScamDetector (lies `references/quellen-registry.md`)
 - [ ] Handelsregister für JEDE Firma (Gründung, GF, Gesellschafter, Kapital)
-- [ ] Digitaler Fußabdruck für JEDEN Akteur (YouTube, Telegram, Facebook, Instagram, X, LinkedIn, Reddit)
-- [ ] Presserecherche (Google News, Medienberichte)
-- [ ] Archive.org für historische Website-Versionen
+- [ ] Digitaler Fußabdruck via Bright Data MCP (lies `references/autonome-recherche.md` Tool-Matrix):
+      YouTube, Telegram, Facebook, Instagram, X, LinkedIn, TikTok, Reddit
+- [ ] Actor Loop für JEDE Person (lies `references/actor-loop.md`):
+      North Data, OpenCorporates, Scam-Historien, Alias-Erkennung
+- [ ] Presserecherche (Bright Data: `search_engine`)
 - [ ] Netzwerk-Analyse (verknüpfte Firmen über gleiche GF/Gesellschafter)
 - [ ] Beweismittel sichern (Volltext, URL, Zeitstempel)
 
@@ -94,8 +99,11 @@ flowchart TD
 **Was**: Funde rechtlich bewerten — je nach Domäne.
 
 **Recht:**
-- [ ] Tatbestände identifizieren (StGB, Nebengesetze)
+- [ ] Tätigkeitskategorisierung (lies `references/taetigkeitskategorisierung.md`)
+- [ ] Tatbestände identifizieren via Normen-Matching (lies `references/normen-matching.md`)
 - [ ] Tatbestandsmerkmale prüfen (objektiv + subjektiv)
+- [ ] Vorsatz-Score berechnen (lies `references/vorsatz-score.md`)
+- [ ] Pro-Produkt-Analyse (lies `references/produkt-tiefenanalyse.md`)
 - [ ] Verjährung prüfen
 - [ ] Zivilrechtliche Ansprüche prüfen
 - [ ] Regulatorische Verstöße identifizieren
@@ -137,6 +145,8 @@ flowchart TD
 
 - [ ] Confidence-Score berechnen (lies `references/confidence-scoring.md`)
 - [ ] Jeden Befund einzeln mit A-E bewerten
+- [ ] Gray Area & Blind Spot Assessment (lies `references/gray-area-blind-spot.md`):
+      6 BSA-Prüfpunkte + 8 GAA-Grauzone-Prüfungen — PFLICHT
 - [ ] Bei Score < 70: Devil's Advocate aktivieren
 - [ ] Disclaimer bestimmen (lies `references/disclaimer-system.md`)
 - [ ] Bewertungs-Legende in Dokument einfügen

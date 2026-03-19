@@ -1,4 +1,4 @@
-# Beratungs-Suite Pro v0.6.1
+# Beratungs-Suite Pro v0.6.2
 
 Integriertes Claude Code Plugin für **Recht**, **Steuern** und **Unternehmensberatung** mit Ermittlungs-Framework, Agent-Team-Modus, autonomer OSINT-Recherche, Multi-Source-Validierung, Confidence-Scoring und Disclaimer-Enforcement.
 
@@ -11,6 +11,17 @@ Die Beratungs-Suite Pro vereint drei professionelle Beratungssäulen in einem Pl
 1. **Recht** — Rechtsrecherche über DE, AT, CH, EU, USA, UAE mit Domain- und PDF-Prüfung
 2. **Steuern** — Steuerrechtliche Analyse, Rechnungsprüfung, DBA-Analyse, Steuerberechnung
 3. **Unternehmensberatung** — Strategische Analyse, Marktintelligenz, Benchmarking mit Consulting-Frameworks
+
+### Neu in v0.6.2: Plugin-Audit — Strukturbereinigung + Qualitätsverbesserungen
+
+- **Hooks gefixt**: Ungültiges `Notification`-Event entfernt, Activity-Logger nach `Stop` migriert, doppelte Stop-Arrays zusammengeführt
+- **5 Legacy-Commands gelöscht**: `ermittlung`, `recht-analyse`, `steuer-check`, `strategie-entwurf`, `umsetzungsplan` — Skills sind die Nachfolger
+- **Agent-Modelle optimiert**: `steuerberater` und `validator` auf Sonnet (statt Opus) — spart Tokens bei einfachen Aufgaben
+- **Agent-Tools erweitert**: `steuerberater` und `validator` haben jetzt `Agent`-Tool für Sub-Agent-Delegation
+- **Kernlogik v2**: Phase 2 (Ermittlung) referenziert jetzt Forensik, Actor Loop, Bright Data Tools; Phase 4 referenziert Tätigkeitskategorisierung, Normen-Matching, Vorsatz-Score, Produkt-Tiefenanalyse; Phase 6 referenziert Gray Area & Blind Spot Assessment
+- **Ermittler-Description**: Bright Data MCP Tools + Forensik-Module in Agent-Description integriert
+- **Experimental Scripts entfernt**: `fedlex-sparql-query.py.experimental`, `eurlex-sparql-query.py.experimental`
+- **commands/-Ordner entfernt**: Leer nach Migration, aus plugin.json entfernt
 
 ### Neu in v0.6.1: Bright Data MCP + Telegram OSINT MCP Integration
 
@@ -375,6 +386,7 @@ MIT
 
 ## Changelog
 
+- **v0.6.2** — Plugin-Audit: Hooks gefixt (Notification→Stop), 5 Legacy-Commands gelöscht, Agent-Modelle optimiert (steuerberater/validator→Sonnet), Kernlogik v2 mit Referenzen auf alle v0.6.0 Module, Ermittler-Description mit Bright Data Tools, Experimental Scripts bereinigt
 - **v0.6.1** — Bright Data MCP + Telegram OSINT MCP: Bright Data `@brightdata/mcp` als Social-Media-OSINT-Backend (Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube — strukturiertes JSON statt HTML-Parsing), Custom Telegram OSINT MCP Server via Telethon MTProto API (4 Tools: Channel-Info, Messages, Search, Members), komplett überarbeitete `autonome-recherche.md` mit Bright Data Tool-Zuständigkeits-Matrix, `ermittlungs-framework.md` Plattform-Checkliste auf Bright Data migriert, neues `setup-check.sh` mit API-Key-Validierung und Python-Paket-Checks, `.mcp.json` um brightdata + telegram-osint Server erweitert
 - **v0.6.0** — OSINT Master-Erweiterung: 9 neue Reference-Files (forensik-digitaler-fussabdruck, telegram-scroll-loop, link-hub-affiliate-analyse, actor-loop, taetigkeitskategorisierung, vorsatz-score, gray-area-blind-spot, produkt-tiefenanalyse, normen-matching), Ermittler-Agent Phase 0 Forensik, Jurisdiktions-Mapping Regulatorische Arbitrage Detection (Marktortprinzip + 9 Offshore-Jurisdiktionen), ScamAdviser + ScamDetector als Pflicht-Schritt 0b im Entscheidungsbaum
 - **v0.5.1** — Regulator-Endpunkte & Website-Trust-Checks: Neue `regulator-endpoints.md` mit funktionierenden API-Endpunkten für 8 Behörden (BaFin, FMA, FINMA, ESMA, SEC, SCA, DFSA, FCA) in 3 Tiers (Direkt-API → Firecrawl → Playwright), ScamAdviser + ScamDetector als PFLICHT-Quellen in `quellen-registry.md` mit Score-Interpretation und Confidence-Score-Integration, 3 neue Red-Flag-Prüfpunkte in `ermittlungs-framework.md` (ScamAdviser/ScamDetector Score, Crypto-Services, Domain-Alter), PFLICHT-Website-Trust-Check im researcher-osint Spawn-Prompt, Tier-1-2-3 Strategie in `autonome-recherche.md` statt generisches "Firecrawl", Diamond-Solution-Dubai-Ermittlung als Referenz-Analyse, plugin.json vereinfacht auf Auto-Discovery (offizielles Anthropic-Pattern)
