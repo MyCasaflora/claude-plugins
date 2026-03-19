@@ -1,0 +1,8 @@
+{
+  "name": "landingpage-audit-pro",
+  "description": "Vollautomatisiertes Landing-Page-Audit über 8 Dimensionen: Performance, Accessibility, SEO, Stress-Test, Content, Rechtliches, CRO-Psychologie und Visual Design. Generiert strukturierte Reports mit visuellen Mockups.",
+  "version": "0.2.1",
+  "author": {
+    "name": "bp"
+  }
+}

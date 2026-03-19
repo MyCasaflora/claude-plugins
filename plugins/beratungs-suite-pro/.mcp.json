@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "rechtsinformationen-bund": {
+      "command": "npx",
+      "args": ["-y", "@iflow-mcp/wolfgangihloff-rechtsinformationen"],
+      "description": "Deutsche Bundesrechtsinformationen mit semantischer und Volltextsuche"
+    },
+    "german-law": {
+      "command": "npx",
+      "args": ["-y", "german-law-mcp"],
+      "description": "Deutsche Gesetze via gesetze-im-internet.de"
+    },
+    "openregister": {
+      "command": "npx",
+      "args": ["-y", "openregister-mcp"],
+      "description": "Handelsregister-Abfragen (DE)"
+    },
+    "ayunis-legal": {
+      "command": "python3",
+      "args": ["-m", "ayunis_legal_mcp"],
+      "description": "OPTIONAL: Semantische Suche über deutsche Gesetze (pgvector + Ollama). Benötigt: PostgreSQL mit pgvector, Ollama lokal. Fallback: german-law + rechtsinformationen-bund decken die gleichen Quellen ab.",
+      "optional": true,
+      "env": {
+        "DATABASE_URL": "postgresql://localhost:5432/ayunis_legal",
+        "OLLAMA_BASE_URL": "http://localhost:11434"
+      }
+    }
+  }
+}

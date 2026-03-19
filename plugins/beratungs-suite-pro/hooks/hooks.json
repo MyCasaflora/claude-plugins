@@ -1,0 +1,36 @@
+{
+  "description": "Beratungs-Suite Pro — Disclaimer-Enforcement, Namensschema und Activity-Logging",
+  "hooks": {
+    "Stop": [
+      {
+        "type": "prompt",
+        "description": "Disclaimer-Enforcement: Prüft ob rechtliche/steuerliche Outputs einen Disclaimer und Confidence-Score enthalten",
+        "prompt": "Prüfe die letzte Antwort des Assistenten. Falls die Antwort eine rechtliche Einschätzung, steuerliche Analyse, Compliance-Bewertung oder strategische Empfehlung enthält:\n\n1. Enthält sie einen Disclaimer-Hinweis (z.B. 'keine Rechtsberatung', 'keine Steuerberatung', 'Angaben ohne Gewähr')?\n2. Enthält sie einen Confidence-Score oder eine Bewertungs-Legende (A-E)?\n3. Enthält sie Quellenangaben oder Normenverweise?\n\nWenn ALLE drei vorhanden sind → antworte nur 'pass'.\nWenn die Antwort KEINE rechtliche/steuerliche/strategische Bewertung enthält → antworte nur 'pass'.\nWenn mindestens eines fehlt → antworte mit einer kurzen Anweisung was ergänzt werden muss, z.B.:\n'DISCLAIMER FEHLT: Bitte ergänze den Standard-Disclaimer gemäß references/disclaimer-system.md und den Confidence-Score gemäß references/confidence-scoring.md.'"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "type": "prompt",
+        "description": "Warnt vor Speicherung ohne korrektes Namensschema in docs/",
+        "matcher": "Write",
+        "prompt": "Der Assistent will eine Datei schreiben. Prüfe:\n\n1. Liegt der Dateipfad innerhalb von docs/analysen/ oder docs/recherchen/?\n2. Falls ja: Folgt der Dateiname dem Schema YYYY-MM-DD-[beschreibung].md?\n\nWenn der Pfad NICHT in docs/ liegt → antworte 'pass' (keine Einschränkung).\nWenn der Pfad in docs/ liegt UND das Namensschema korrekt ist → antworte 'pass'.\nWenn der Pfad in docs/ liegt ABER das Namensschema falsch ist → antworte: 'NAMENSSCHEMA: Datei in docs/ muss dem Format YYYY-MM-DD-beschreibung.md folgen. Siehe references/docs-output.md.'"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "type": "command",
+        "description": "Loggt jede Dateispeicherung mit Zeitstempel",
+        "matcher": "Write",
+        "command": "echo \"$(date '+%Y-%m-%d %H:%M') — Datei gespeichert\" >> ${CLAUDE_PLUGIN_ROOT}/docs/.write-log.txt"
+      }
+    ],
+    "Notification": [
+      {
+        "type": "command",
+        "description": "Loggt Umsetzungsplan-Aktivitäten",
+        "matcher": ".*umsetzungsplan.*",
+        "command": "echo \"$(date '+%Y-%m-%d %H:%M') — Umsetzungsplan erstellt/aktualisiert\" >> ${CLAUDE_PLUGIN_ROOT}/docs/.activity-log.txt"
+      }
+    ]
+  }
+}

@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+"""
+Fedlex SPARQL Client (Schweiz)
+Abfrage des Schweizer Bundesrechts über den SPARQL-Endpoint.
+Endpoint: https://fedlex.data.admin.ch/sparqlendpoint
+
+Usage:
+  python3 fedlex-sparql-query.py --query "Mehrwertsteuer"
+  python3 fedlex-sparql-query.py --sr "220" (OR-Nummer)
+"""
+
+import argparse
+import json
+import ssl
+import sys
+import urllib.request
+import urllib.parse
+
+SSL_CTX = ssl.create_default_context()
+SSL_CTX.check_hostname = False
+SSL_CTX.verify_mode = ssl.CERT_NONE
+
+
+ENDPOINT = "https://fedlex.data.admin.ch/sparqlendpoint"
+
+
+def execute_sparql(query: str) -> dict:
+    """Führt eine SPARQL-Abfrage auf Fedlex aus."""
+    data = urllib.parse.urlencode({
+        "query": query,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(ENDPOINT, data=data, headers={
+        "Accept": "application/sparql-results+json",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "beratungs-suite/1.0"
+    })
+    with urllib.request.urlopen(req, timeout=30, context=SSL_CTX) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def search_by_keyword(keyword: str, limit: int = 10) -> dict:
+    """Suche nach Schweizer Bundesrecht per Stichwort."""
+    query = f"""
+    PREFIX jolux: <http://data.legilux.public.lu/resource/ontology/jolux#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    SELECT DISTINCT ?act ?title ?sr ?date
+    WHERE {{
+      ?act a jolux:ConsolidationAbstract .
+      ?act jolux:classifiedByTaxonomyEntry ?sr_entry .
+      ?sr_entry skos:notation ?sr .
+      ?act rdfs:label ?title .
+      OPTIONAL {{ ?act jolux:dateDocument ?date . }}
+      FILTER(LANG(?title) = "de")
+      FILTER(CONTAINS(LCASE(?title), LCASE("{keyword}")))
+    }}
+    ORDER BY ?sr
+    LIMIT {limit}
+    """
+    return execute_sparql(query)
+
+
+def get_by_sr(sr_number: str) -> dict:
+    """Hole ein Gesetz per SR-Nummer (Systematische Rechtssammlung)."""
+    query = f"""
+    PREFIX jolux: <http://data.legilux.public.lu/resource/ontology/jolux#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    SELECT ?act ?title ?sr ?date
+    WHERE {{
+      ?act a jolux:ConsolidationAbstract .
+      ?act jolux:classifiedByTaxonomyEntry ?sr_entry .
+      ?sr_entry skos:notation "{sr_number}" .
+      ?act rdfs:label ?title .
+      OPTIONAL {{ ?act jolux:dateDocument ?date . }}
+      FILTER(LANG(?title) = "de")
+    }}
+    LIMIT 5
+    """
+    return execute_sparql(query)
+
+
+def format_results(data: dict) -> str:
+    """Formatiert SPARQL-Ergebnisse."""
+    output = []
+    bindings = data.get("results", {}).get("bindings", [])
+
+    output.append(f"Treffer: {len(bindings)}\n")
+
+    for i, b in enumerate(bindings, 1):
+        title = b.get("title", {}).get("value", "N/A")
+        sr = b.get("sr", {}).get("value", "N/A")
+        date = b.get("date", {}).get("value", "N/A")
+        act = b.get("act", {}).get("value", "N/A")
+
+        output.append(f"{i}. {title}")
+        output.append(f"   SR: {sr}")
+        output.append(f"   Datum: {date}")
+        output.append(f"   URI: {act}")
+        output.append("")
+
+    return "\n".join(output)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Fedlex SPARQL Client (Schweiz)")
+    parser.add_argument("--query", "-q", help="Stichwortsuche")
+    parser.add_argument("--sr", "-s", help="SR-Nummer (z.B. 220 für OR)")
+    parser.add_argument("--limit", "-l", type=int, default=10, help="Max. Ergebnisse")
+    parser.add_argument("--json", action="store_true", help="Rohe JSON-Ausgabe")
+
+    args = parser.parse_args()
+
+    if not args.query and not args.sr:
+        parser.error("Entweder --query oder --sr angeben")
+
+    try:
+        if args.sr:
+            result = get_by_sr(args.sr)
+        else:
+            result = search_by_keyword(args.query, args.limit)
+
+        if args.json:
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        else:
+            print(format_results(result))
+
+    except urllib.error.HTTPError as e:
+        print(f"HTTP-Fehler: {e.code} {e.reason}", file=sys.stderr)
+        sys.exit(1)
+    except urllib.error.URLError as e:
+        print(f"Verbindungsfehler: {e.reason}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
