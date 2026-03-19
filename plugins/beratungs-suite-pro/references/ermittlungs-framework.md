@@ -103,20 +103,20 @@ Für JEDEN relevanten Akteur (Person, Firma, Marke, Produkt):
 
 | Plattform | Was suchen | Tool |
 |-----------|-----------|------|
-| **YouTube** | Channels, Videos, Kommentare, Subscriber-Zahl | Firecrawl |
-| **Facebook** | Öffentliche Seiten, Gruppen, Posts, Bewertungen | Firecrawl |
-| **Telegram** | Channels, Gruppen, Bots, gepinnte Nachrichten | Firecrawl + Deep Research |
-| **Instagram** | Profile, Posts, Stories (öffentlich), Follower-Zahl | Firecrawl |
-| **X/Twitter** | Profile, Posts, Replies, Erwähnungen | Firecrawl |
-| **TikTok** | Profile, Videos, Kommentare | Firecrawl |
-| **LinkedIn** | Firmenprofil, Mitarbeiter, Stellenanzeigen | Firecrawl |
+| **YouTube** | Channels, Videos, Kommentare, Subscriber-Zahl | Bright Data: `web_data_youtube_channel_search` + `web_data_youtube_channel_info` |
+| **Facebook** | Öffentliche Seiten, Gruppen, Posts, Bewertungen | Bright Data: `web_data_facebook_profile` + `web_data_facebook_posts` |
+| **Telegram** | Channels, Gruppen, Bots, gepinnte Nachrichten | Bright Data: `scrape_as_markdown` auf t.me/s/USERNAME |
+| **Instagram** | Profile, Posts, Stories (öffentlich), Follower-Zahl | Bright Data: `web_data_instagram_profile` + `web_data_instagram_posts` |
+| **X/Twitter** | Profile, Posts, Replies, Erwähnungen | Bright Data: `web_data_twitter_profile` + `web_data_twitter_posts` |
+| **TikTok** | Profile, Videos, Kommentare | Bright Data: `web_data_tiktok_profile` + `web_data_tiktok_posts` |
+| **LinkedIn** | Firmenprofil, Mitarbeiter, Stellenanzeigen | Bright Data: `web_data_linkedin_person_profile` + `web_data_linkedin_company_profile` |
 | **WhatsApp** | Öffentliche Gruppenlinks (wenn auffindbar) | Deep Research |
-| **Reddit** | Erwähnungen, Threads, Erfahrungsberichte | Firecrawl |
-| **Trustpilot/Google Reviews** | Bewertungen, Beschwerden, Muster | Firecrawl |
-| **ScamAdviser** | Trustscore (0-100), Risikobewertung, Positive/Negative Highlights | Firecrawl: scamadviser.com/check/{domain} |
-| **ScamDetector** | VLDTR-Score (0-100), Threat/Phishing/Malware-Analyse, Blacklisting | Firecrawl: scamdetector.com/validator/{domain} |
-| **Bundesanzeiger** | Jahresabschlüsse, Bekanntmachungen | Firecrawl |
-| **Archive.org** | Historische Versionen der Webseite | Firecrawl |
+| **Reddit** | Erwähnungen, Threads, Erfahrungsberichte | Bright Data: `scrape_as_markdown` |
+| **Trustpilot/Google Reviews** | Bewertungen, Beschwerden, Muster | Bright Data: `scrape_as_markdown` |
+| **ScamAdviser** | Trustscore (0-100), Risikobewertung, Positive/Negative Highlights | Bright Data: `scrape_as_markdown` auf scamadviser.com/check/{domain} |
+| **ScamDetector** | VLDTR-Score (0-100), Threat/Phishing/Malware-Analyse, Blacklisting | Bright Data: `scrape_as_markdown` auf scamdetector.com/validator/{domain} |
+| **Bundesanzeiger** | Jahresabschlüsse, Bekanntmachungen | Bright Data: `scrape_as_markdown` |
+| **Archive.org** | Historische Versionen der Webseite | Bright Data: `scrape_as_markdown` |
 
 ### Was analysieren
 
@@ -264,12 +264,22 @@ Speichere Volltext in ${CLAUDE_PLUGIN_ROOT}/docs/recherchen/
 ### Spawn-Prompt: researcher-osint
 
 ```
-Du bist OSINT-Researcher. Prüfe für JEDEN der folgenden Akteure ALLE Plattformen:
-YouTube (Channels, Videos), Telegram (Channels, Gruppen), Facebook (Seiten, Gruppen),
-Instagram (Profile), X/Twitter (Profile), TikTok (Profile), LinkedIn (Firmen, Mitarbeiter),
-Reddit (Erwähnungen), Trustpilot/Google Reviews, WhatsApp (öffentliche Links).
+Du bist OSINT-Researcher. Nutze Bright Data MCP für Social Media und Telegram OSINT MCP für Telegram.
 
-WEBSITE-TRUST-CHECK (PFLICHT für jede Domain):
+SOCIAL MEDIA (Bright Data MCP — strukturiertes JSON, kein HTML-Parsing):
+YouTube: web_data_youtube_channel_search → web_data_youtube_channel_info
+Facebook: web_data_facebook_profile → web_data_facebook_posts
+Instagram: web_data_instagram_profile → web_data_instagram_posts
+X/Twitter: web_data_twitter_profile → web_data_twitter_posts
+TikTok: web_data_tiktok_profile → web_data_tiktok_posts
+LinkedIn: web_data_linkedin_person_profile / web_data_linkedin_company_profile
+Reddit/Trustpilot/Reviews: scrape_as_markdown
+
+TELEGRAM (via Bright Data — kein separater MCP nötig):
+scrape_as_markdown auf t.me/s/USERNAME → ~20 neueste Nachrichten als Markdown
+Für Suche: search_engine mit "site:t.me MARKENNAME"
+
+WEBSITE-TRUST-CHECK (PFLICHT für jede Domain — Bright Data: scrape_as_markdown):
 ScamAdviser (scamadviser.com/check/{domain}) → Trustscore, Risikobewertung, Highlights
 ScamDetector (scamdetector.com/validator/{domain}) → VLDTR-Score, Threat-Analyse, Blacklisting
 

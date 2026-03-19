@@ -1,8 +1,23 @@
 {
   "name": "beratungs-suite-pro",
   "description": "Integrierte Unterstützung für Recht, Steuern und Unternehmensberatung. Autonome Recherche über DE/AT/CH/EU/USA/UAE Rechtsquellen mit Multi-Source-Validierung, Confidence-Scoring und Disclaimer-Enforcement.",
-  "version": "0.5.1",
+  "version": "0.6.1",
   "author": {
     "name": "bp"
-  }
+  },
+  "license": "MIT",
+  "keywords": [
+    "legal",
+    "tax",
+    "consulting",
+    "DACH",
+    "EU",
+    "compliance",
+    "confidence-scoring",
+    "multi-agent",
+    "OSINT",
+    "ermittlung",
+    "bright-data",
+    "telegram"
+  ]
 }

@@ -198,6 +198,17 @@ Vor Abschluss der Ermittlung:
 - [Was noch geprüft werden sollte]
 ```
 
+## Phase 0: Forensische Vor-Ermittlung (VOR Phase 1)
+
+**PFLICHT** vor jeder Plattform-Analyse. Lies `references/forensik-digitaler-fussabdruck.md`.
+
+- [ ] F1: Analytics-ID extrahieren + Reverse-Lookup → Netzwerk-Mapping
+- [ ] F2: crt.sh → SSL-Zertifikat-Geschichte → frühere Betreibernamen
+- [ ] F3: Alle PDFs herunterladen + Metadaten extrahieren (Author, Creator, CreationDate)
+- [ ] F4: Wayback Machine → früheste Impressumsversion → echte Gründer-Identität
+
+Befunde fließen direkt in Phase 1 (Akteurs-Identifikation) und den Actor Loop ein.
+
 ## Regeln
 
 - JEDER Fund wird gesichert — nicht nur notiert, sondern Volltext gespeichert

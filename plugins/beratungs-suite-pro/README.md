@@ -1,4 +1,4 @@
-# Beratungs-Suite Pro v0.5.1
+# Beratungs-Suite Pro v0.6.1
 
 Integriertes Claude Code Plugin für **Recht**, **Steuern** und **Unternehmensberatung** mit Ermittlungs-Framework, Agent-Team-Modus, autonomer OSINT-Recherche, Multi-Source-Validierung, Confidence-Scoring und Disclaimer-Enforcement.
 
@@ -11,6 +11,29 @@ Die Beratungs-Suite Pro vereint drei professionelle Beratungssäulen in einem Pl
 1. **Recht** — Rechtsrecherche über DE, AT, CH, EU, USA, UAE mit Domain- und PDF-Prüfung
 2. **Steuern** — Steuerrechtliche Analyse, Rechnungsprüfung, DBA-Analyse, Steuerberechnung
 3. **Unternehmensberatung** — Strategische Analyse, Marktintelligenz, Benchmarking mit Consulting-Frameworks
+
+### Neu in v0.6.1: Bright Data MCP + Telegram OSINT MCP Integration
+
+- **Bright Data MCP** (`@brightdata/mcp`): Ersetzt Firecrawl für Social Media OSINT — strukturierte JSON-Daten von Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube via plattformspezifische Scraper (umgeht Login-Walls). Zusätzlich Web Unlocker für Behördenseiten und SERP API für Google News.
+- **Telegram via Bright Data**: Öffentliche Channels über `scrape_as_markdown` auf `t.me/s/USERNAME` — kein separater MCP-Server nötig, keine Telegram API-Keys erforderlich.
+- **Tool-Zuständigkeits-Matrix**: Klare Zuordnung welches MCP-Tool für welche Plattform zuständig ist (in `autonome-recherche.md`)
+- **Firecrawl-Migration**: Alle Social-Media-Referenzen von Firecrawl auf Bright Data MCP umgestellt
+- **Setup-Check erweitert**: Prüft Bright Data API-Token, Telegram Session, Python-Pakete (telethon, mcp), Behörden-APIs
+- **ScamAdviser + ScamDetector**: Jetzt über Bright Data `scrape_as_markdown` statt Firecrawl
+
+### Neu in v0.6.0: OSINT Master-Erweiterung — 9 neue Ermittlungsmodule
+
+- **Forensik-Module** (F1-F4): Reverse Analytics/IP-Lookup, SSL-Zertifikat-Historie (crt.sh), PDF-Metadaten-Forensik, Wayback Machine De-Anonymisierung — alles VOR dem OSINT-Scan
+- **Telegram Scroll-Loop**: Technischer Lazy-Loading-Algorithmus mit Signal-Pattern-Matching (Rendite, Schadens-, GwG-, Vorsatz-Indikatoren + Regex-Patterns)
+- **Link-Hub & Affiliate-Analyse**: Shortlink-Auflösung, Facebook Ad Library als Pflicht-Quelle, Provisionsstruktur-Mapping, §5a UWG-Erkennung
+- **Actor Loop**: Iterative Personen-Tiefenrecherche (North Data, OpenCorporates, Scam-Historien, Social Graphing, Alias-Erkennung) mit JSON-Dossier-Output
+- **Tätigkeitskategorisierung**: 11 Kategorien (Immobilien bis Gesundheit) mit Rechtsgrundlagen, Kontrastanalyse-Regel für selektive Lizenzangaben
+- **Vorsatz-Score**: Quantifiziertes Punkte-System (0-60+) für strafrechtlichen Intentionsnachweis — Kenntnis/Weiterbewerbung, Verschleierung, Produkt-Risiko
+- **Gray Area & Blind Spot Assessment**: 6 BSA-Prüfpunkte (Prospektpflicht bis Affiliate-Transparenz) + 8 GAA-Grauzone-Prüfungen (Finanzbildung vs. Beratung, HWG, KYC)
+- **Produkt-Tiefenanalyse**: Pro-Produkt-Loop mit Renditeberechnung (Zinseszins), MLM-Erkennung, Risikokategorie-Zuordnung (🔴🟠🟡🟢)
+- **Normen-Matching**: Vollständige Muster→Normen-Tabelle (Finanzvertrieb, Kapitalmarkt, Wettbewerb, Strafrecht, Vertragsrecht, Gesundheit)
+- **Regulatorische Arbitrage Detection**: Marktortprinzip-Prüfung, 9 Offshore-Jurisdiktionen mit Risikoprofilen
+- **ScamAdviser + ScamDetector**: Als PFLICHT-Schritt 0b im Entscheidungsbaum (vor OSINT), Score-Interpretation, Confidence-Abzug-Regeln
 
 ### Neu in v0.5.1: Regulator-Endpunkte, Website-Trust-Checks, Plugin-Standardisierung
 
@@ -106,11 +129,20 @@ beratungs-suite-pro/
 │   ├── ermittlungs-framework.md       # Komplexitäts-Erkennung + Team-Zusammensetzungen
 │   ├── autonome-recherche.md          # Entscheidungsbaum + Proaktive Ermittlung (OSINT)
 │   ├── regulator-endpoints.md         # Tier 1-2-3 API-Endpunkte für 8 Behörden (NEU v0.5.1)
+│   ├── forensik-digitaler-fussabdruck.md # Reverse Analytics, SSL-Historie, PDF-Forensik (NEU v0.6.0)
+│   ├── telegram-scroll-loop.md        # Lazy-Loading-Algorithmus + Signal-Patterns (NEU v0.6.0)
+│   ├── link-hub-affiliate-analyse.md  # Shortlink-Auflösung, FB Ad Library, §5a UWG (NEU v0.6.0)
+│   ├── actor-loop.md                  # Personen-Tiefenrecherche + Dossier (NEU v0.6.0)
+│   ├── taetigkeitskategorisierung.md  # 11 Kategorien + Kontrastanalyse (NEU v0.6.0)
+│   ├── vorsatz-score.md               # Strafrechtlicher Intentionsnachweis 0-60+ (NEU v0.6.0)
+│   ├── gray-area-blind-spot.md        # 6 BSA + 8 GAA Prüfkataloge (NEU v0.6.0)
+│   ├── produkt-tiefenanalyse.md       # Pro-Produkt-Loop + Renditeberechnung (NEU v0.6.0)
+│   ├── normen-matching.md             # Muster → Normen Zuordnung (NEU v0.6.0)
 │   ├── confidence-scoring.md          # Scoring-Algorithmus (9 Schritte)
 │   ├── disclaimer-system.md           # Disclaimer-Texte + Bewertungs-Legende (A-E)
 │   ├── docs-output.md                 # Docs-Output-Konvention (Pfade, Namensschema)
-│   ├── jurisdiktions-mapping.md       # Stichwort → Jurisdiktion → Quellen
-│   └── quellen-registry.md            # Alle Quellen mit Status + Fallbacks + Trust-Checks (UPD v0.5.1)
+│   ├── jurisdiktions-mapping.md       # Stichwort → Jurisdiktion → Quellen + Arbitrage (UPD v0.6.0)
+│   └── quellen-registry.md            # Alle Quellen mit Status + Fallbacks + Trust-Checks (UPD v0.6.0)
 │
 ├── docs/                              # Plugin-eigene Dokumente
 │   ├── analysen/                      # Fertige Reports + Gutachten
@@ -343,6 +375,8 @@ MIT
 
 ## Changelog
 
+- **v0.6.1** — Bright Data MCP + Telegram OSINT MCP: Bright Data `@brightdata/mcp` als Social-Media-OSINT-Backend (Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube — strukturiertes JSON statt HTML-Parsing), Custom Telegram OSINT MCP Server via Telethon MTProto API (4 Tools: Channel-Info, Messages, Search, Members), komplett überarbeitete `autonome-recherche.md` mit Bright Data Tool-Zuständigkeits-Matrix, `ermittlungs-framework.md` Plattform-Checkliste auf Bright Data migriert, neues `setup-check.sh` mit API-Key-Validierung und Python-Paket-Checks, `.mcp.json` um brightdata + telegram-osint Server erweitert
+- **v0.6.0** — OSINT Master-Erweiterung: 9 neue Reference-Files (forensik-digitaler-fussabdruck, telegram-scroll-loop, link-hub-affiliate-analyse, actor-loop, taetigkeitskategorisierung, vorsatz-score, gray-area-blind-spot, produkt-tiefenanalyse, normen-matching), Ermittler-Agent Phase 0 Forensik, Jurisdiktions-Mapping Regulatorische Arbitrage Detection (Marktortprinzip + 9 Offshore-Jurisdiktionen), ScamAdviser + ScamDetector als Pflicht-Schritt 0b im Entscheidungsbaum
 - **v0.5.1** — Regulator-Endpunkte & Website-Trust-Checks: Neue `regulator-endpoints.md` mit funktionierenden API-Endpunkten für 8 Behörden (BaFin, FMA, FINMA, ESMA, SEC, SCA, DFSA, FCA) in 3 Tiers (Direkt-API → Firecrawl → Playwright), ScamAdviser + ScamDetector als PFLICHT-Quellen in `quellen-registry.md` mit Score-Interpretation und Confidence-Score-Integration, 3 neue Red-Flag-Prüfpunkte in `ermittlungs-framework.md` (ScamAdviser/ScamDetector Score, Crypto-Services, Domain-Alter), PFLICHT-Website-Trust-Check im researcher-osint Spawn-Prompt, Tier-1-2-3 Strategie in `autonome-recherche.md` statt generisches "Firecrawl", Diamond-Solution-Dubai-Ermittlung als Referenz-Analyse, plugin.json vereinfacht auf Auto-Discovery (offizielles Anthropic-Pattern)
 - **v0.5.0** — Umsetzungsplan-Modul: Standalone `/umsetzungsplan` Command + Skill, spezialisierter `umsetzungsplaner` Agent, 6-Felder-Maßnahmen-Format (Was/Warum/Wer/Frist/Womit/Erfolgskriterium), Fortschritts-Tracking (✗/◷/✓), Kosten-Übersicht pro Maßnahme, Konflikt-Auflösungs-Matrix bei Multi-Domänen, Veraltungs-Check für Findings, Agent-Team-Modus für komplexe Multi-Domänen-Pläne, Hooks implementiert (Disclaimer-Enforcement, Namensschema-Prüfung, Activity-Logging), Legacy-Commands zu Skills migriert (ermittlung, recht-analyse, steuer-check, strategie-entwurf), Agent-Frontmatter korrigiert (name-Feld), plugin.json Component-Paths hinzugefügt, Ayunis-Legal MCP als optional markiert
 - **v0.4.1** — Parallele Researcher-Architektur: 3 Sonnet-Agents (Regulatorik, OSINT, Register) recherchieren gleichzeitig, 2-Phasen-Ablauf (Sammlung parallel → Analyse sequenziell), Teams 7-8 Agents

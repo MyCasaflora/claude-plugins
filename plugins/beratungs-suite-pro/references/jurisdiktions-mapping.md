@@ -64,3 +64,40 @@ Primär:  Firecrawl auf legislation.ae
 Sekundär: Firecrawl auf tax.gov.ae, difc.ae, mof.gov.ae
 Spezial:  Deep Research (Gemini/Perplexity) für aktuelle Entwicklungen
 ```
+
+---
+
+## Regulatorische Arbitrage Detection
+
+### Targeting-Verstoß: Marktortprinzip
+
+```
+PRÜFUNG:
+  1. Wo ist die Firma registriert?
+  2. In welcher Sprache ist der Content? (stärkster Indikator)
+  3. An wen richtet sich das Marketing geografisch? (Facebook Ad Library!)
+
+RED-FLAG-KOMBINATIONEN:
+  Deutsch + Dubai (FZCO)                 → BaFin-Zuständigkeit trotzdem
+  Deutsch + St. Vincent und die Grenadinen → klar: Regulierungs-Arbitrage
+  Deutsch + UK Ltd. + keine FCA-Lizenz   → KWG-relevant in DE
+  Deutsch + Wyoming LLC                  → Keine direkte Vollstreckung in DE
+
+RECHTLICHE KONSEQUENZ:
+  Wer den deutschen Markt aktiv bewirbt, unterliegt der BaFin —
+  egal wo die Firma sitzt. (Marktortprinzip nach EU-Recht)
+```
+
+### Offshore-Jurisdiktionen mit erhöhtem Risiko
+
+| Jurisdiktion | Risikoprofil | Typische Struktur |
+|---|---|---|
+| Dubai (FZCO/LLC) | Hoch | Nullsteuer, wenig Transparenz |
+| St. Vincent und die Grenadinen | Sehr hoch | Kein Regulierungsrahmen für Finanzprodukte |
+| Seychellen | Hoch | Keine öffentlichen Gesellschafterregister |
+| Marshall Islands | Sehr hoch | Extremes Offshore-Zentrum |
+| Vanuatu | Hoch | Bekannt für Forex-Lizenzen ohne echte Aufsicht |
+| Belize | Hoch | Offshore-Banklizenzen mit wenig Substanz |
+| Wyoming LLC (USA) | Mittel-Hoch | Kein öffentliches Gesellschafterregister, kein Mindestkapital |
+| UK Ltd (post-Brexit) | Mittel | Briefkastengesellschaft möglich; in DE ggf. als OHG behandelt |
+| Zypern (ohne CySEC-Lizenz) | Mittel | EU-Mitglied, aber Briefkasten häufig |

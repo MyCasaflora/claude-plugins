@@ -15,10 +15,14 @@
       "args": ["-y", "openregister-mcp"],
       "description": "Handelsregister-Abfragen (DE)"
     },
+    "brightdata": {
+      "url": "https://mcp.brightdata.com/mcp?token=${BRIGHTDATA_API_TOKEN}",
+      "description": "Bright Data Web MCP: Social Media OSINT (Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube) + Web Unlocker + SERP API. Ersetzt Firecrawl für Social Media."
+    },
     "ayunis-legal": {
       "command": "python3",
       "args": ["-m", "ayunis_legal_mcp"],
-      "description": "OPTIONAL: Semantische Suche über deutsche Gesetze (pgvector + Ollama). Benötigt: PostgreSQL mit pgvector, Ollama lokal. Fallback: german-law + rechtsinformationen-bund decken die gleichen Quellen ab.",
+      "description": "OPTIONAL: Semantische Suche über deutsche Gesetze (pgvector + Ollama).",
       "optional": true,
       "env": {
         "DATABASE_URL": "postgresql://localhost:5432/ayunis_legal",

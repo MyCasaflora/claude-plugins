@@ -4,6 +4,23 @@ Dieses Dokument definiert, wann und wie das Plugin selbständig zusätzliche Inf
 
 ---
 
+## Tool-Zuständigkeiten (Übersicht)
+
+| Aufgabe | Tool |
+|---|---|
+| Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube | **Bright Data MCP** (`web_data_*` Tools) |
+| Telegram Channels — Nachrichten, Metadaten | **Bright Data MCP** (`scrape_as_markdown` auf `t.me/s/USERNAME`) |
+| Behördenseiten, Handelsregister-Web, Archive.org | **Bright Data MCP** (`scrape_as_markdown` / `web_unlocker`) |
+| Regulierungs-Warnlisten (BaFin, FMA, SEC, …) | **Bright Data MCP** (`scrape_as_markdown`) |
+| Website-Trust-Check (ScamAdviser, ScamDetector) | **Bright Data MCP** (`scrape_as_markdown`) |
+| Google News / Presseartikel | **Bright Data MCP** (`search_engine`) |
+| Deutsche Gesetze | rechtsinformationen-bund / german-law MCPs |
+| Handelsregister-Abfragen (DE) | openregister MCP |
+
+> **Hinweis:** Firecrawl wird für Social Media **nicht mehr verwendet** — es scheitert an Login-Walls aller großen Plattformen. Bright Data MCP löst dieses Problem durch eigene Proxy-Infrastruktur und plattformspezifische Scraper.
+
+---
+
 ## Grundprinzip
 
 Das Plugin prüft nach jeder Primärquellen-Abfrage:
@@ -34,51 +51,64 @@ Anfrage erhalten
 │   │
 │   ├── 0a. Regulatorische Warnungen prüfen
 │   │   │   Für JEDE beteiligte Person/Firma/Marke:
-│   │   │   *** Lade zuerst references/regulator-endpoints.md für konkrete URLs ***
-│   │   │
-│   │   │   TIER 1 — Direkte API (curl, kein Browser):
-│   │   ├── DE: BaFin Unternehmensdatenbank → curl auf portal.mvp.bafin.de/database/InstInfo/
-│   │   ├── AT: FMA Warnliste → WordPress REST API auf fma.gv.at/wp-json/wp/v2/posts?categories=42
-│   │   ├── EU: ESMA Warnungen → esma.europa.eu/databases-library/investor-corner/warnings
-│   │   ├── USA: SEC EDGAR → efts.sec.gov/LATEST/search-index
-│   │   │
-│   │   │   TIER 2 — Firecrawl (JS-Rendering):
-│   │   ├── DE: BaFin Warnungen (unerlaubte Geschäfte) → Firecrawl auf bafin.de Expertensuche
-│   │   ├── CH: FINMA Bewilligungsträger + Warnliste → Firecrawl auf finma.ch
-│   │   ├── UK: FCA Register → Firecrawl auf register.fca.org.uk
-│   │   ├── UAE: DFSA/DIFC Register → Firecrawl auf dfsa.ae/public-register
-│   │   │
-│   │   │   TIER 3 — Playwright (volle Browser-Session):
-│   │   ├── UAE: SCA Warnungen → Playwright auf sca.gov.ae (braucht Session-Cookie)
-│   │   └── International: IOSCO Alerts → Firecrawl auf iosco.org/investor_alerts
+│   │   ├── DE: BaFin Warnliste → Bright Data: scrape_as_markdown auf bafin.de/warnungen
+│   │   ├── AT: FMA Investorenwarnungen → Bright Data: scrape_as_markdown auf fma.gv.at/investorenwarnungen
+│   │   ├── CH: FINMA Warnliste → Bright Data: scrape_as_markdown auf finma.ch/warnliste
+│   │   ├── EU: ESMA Warnungen → Bright Data: scrape_as_markdown auf esma.europa.eu/investor-corner/warnings
+│   │   ├── USA: SEC EDGAR + Enforcement → Bright Data: scrape_as_markdown auf sec.gov/litigation
+│   │   └── International: IOSCO Alerts → Bright Data: scrape_as_markdown auf iosco.org/investor_alerts
 │   │
-│   ├── 0b. Digitaler Fußabdruck scannen (OSINT)
+│   ├── 0b. Website-Trust-Check (bei JEDER Domain)
+│   │   │   Für JEDE Domain die im Kontext auftaucht:
+│   │   ├── ScamAdviser → Bright Data: scrape_as_markdown auf scamadviser.com/check/{domain}
+│   │   │     → Trustscore, Risikobewertung, Positive/Negative Highlights
+│   │   └── ScamDetector → Bright Data: scrape_as_markdown auf scamdetector.com/validator/{domain}
+│   │         → VLDTR-Score, Threat-Analyse, Blacklisting-Status
+│   │
+│   ├── 0c. Digitaler Fußabdruck scannen (OSINT)
 │   │   │   Für JEDE beteiligte Person/Firma/Marke:
-│   │   ├── YouTube → Firecrawl: Suche nach Channels/Videos der Betroffenen
-│   │   ├── Facebook → Firecrawl: Öffentliche Seiten/Gruppen
-│   │   ├── Telegram → Firecrawl/Deep Research: Channels, Gruppen, Bots
-│   │   ├── Instagram → Firecrawl: Öffentliche Profile/Beiträge
-│   │   ├── X/Twitter → Firecrawl: Öffentliche Profile/Posts
-│   │   ├── TikTok → Firecrawl: Öffentliche Profile/Videos
-│   │   ├── LinkedIn → Firecrawl: Firmenprofile, Mitarbeiter
-│   │   └── Google News → Deep Research: Presseartikel, Medienberichte
+│   │   │
+│   │   ├── YouTube → Bright Data: web_data_youtube_channel_search (USERNAME)
+│   │   │            → dann web_data_youtube_channel_info für Details
+│   │   │
+│   │   ├── Facebook → Bright Data: web_data_facebook_profile (URL)
+│   │   │             → web_data_facebook_posts (URL, limit: 50)
+│   │   │
+│   │   ├── Telegram → Bright Data: scrape_as_markdown auf t.me/s/USERNAME
+│   │   │              → Gibt ~20 neueste Nachrichten als Markdown zurück
+│   │   │              → Für ältere Nachrichten: mehrere Requests mit Scroll-Offset
+│   │   │
+│   │   ├── Instagram → Bright Data: web_data_instagram_profile (USERNAME)
+│   │   │              → web_data_instagram_posts (USERNAME, limit: 50)
+│   │   │
+│   │   ├── X/Twitter → Bright Data: web_data_twitter_profile (USERNAME)
+│   │   │              → web_data_twitter_posts (USERNAME, limit: 50)
+│   │   │
+│   │   ├── TikTok → Bright Data: web_data_tiktok_profile (USERNAME)
+│   │   │           → web_data_tiktok_posts (USERNAME, limit: 50)
+│   │   │
+│   │   ├── LinkedIn → Bright Data: web_data_linkedin_person_profile (URL)
+│   │   │             → web_data_linkedin_company_profile (URL)
+│   │   │
+│   │   └── Google News → Bright Data: search_engine (MARKENNAME + "Betrug" ODER "Warnung" ODER "Klage")
 │   │
-│   ├── 0c. Beweismittelsicherung
+│   ├── 0d. Beweismittelsicherung
 │   │   │   Für JEDEN relevanten Fund:
-│   │   ├── Screenshot/Snapshot der Quelle anfertigen (Firecrawl Volltext)
-│   │   ├── Archive.org Wayback Machine prüfen → Firecrawl auf web.archive.org
-│   │   ├── Zeitstempel dokumentieren
+│   │   ├── Volltext der Quelle sichern (Bright Data: scrape_as_markdown)
+│   │   ├── Archive.org Wayback Machine prüfen → Bright Data: scrape_as_markdown auf
+│   │   │   web.archive.org/web/*/ORIGINAL_URL
+│   │   ├── Zeitstempel dokumentieren (ISO 8601)
 │   │   ├── URL + Zugriffsdatum festhalten
 │   │   └── Alle Funde in docs/recherchen/ speichern (siehe docs-output.md)
 │   │
-│   ├── 0d. Unabhängige Verifizierung der User-Unterlagen
+│   ├── 0e. Unabhängige Verifizierung der User-Unterlagen
 │   │   ├── Behauptungen des Users gegen öffentliche Quellen prüfen
-│   │   ├── Genannte Firmen/Personen im Handelsregister nachschlagen
+│   │   ├── Genannte Firmen/Personen im Handelsregister nachschlagen (openregister MCP)
 │   │   ├── Genannte Lizenzen/Genehmigungen bei Aufsichtsbehörden prüfen
 │   │   ├── Genannte Urteile/Bescheide in Rechtsprechungsdatenbanken suchen
 │   │   └── Bei Widersprüchen: User informieren + beide Versionen dokumentieren
 │   │
-│   └── 0e. Vollständigkeitsprüfung
+│   └── 0f. Vollständigkeitsprüfung
 │       │   Nach Abschluss der proaktiven Ermittlung:
 │       ├── "Welche Akteure fehlen noch im Bild?"
 │       ├── "Gibt es verknüpfte Unternehmen/Personen, die nicht erwähnt wurden?"
@@ -93,8 +123,9 @@ Anfrage erhalten
 │   │       (Gesellschaftsform, Sitz, Geschäftsführer, Stammkapital)
 │   │
 │   ├── Domain / URL erwähnt?
-│   │   └── → Firecrawl: Webseite crawlen
+│   │   └── → Bright Data: scrape_as_markdown (Web Unlocker — umgeht Blocks)
 │   │       → Impressum, Datenschutzerklärung, AGB extrahieren
+│   │       → ScamAdviser + ScamDetector Trust-Score abrufen
 │   │       → Domain-WHOIS prüfen (wenn relevant)
 │   │
 │   ├── PDF / Dokument bereitgestellt?
@@ -104,10 +135,10 @@ Anfrage erhalten
 │   │
 │   ├── Person erwähnt (im geschäftlichen Kontext)?
 │   │   └── → openregister-mcp: Beteiligungen prüfen
-│   │       → Firecrawl: Bundesanzeiger Bekanntmachungen
+│   │       → Bright Data: scrape_as_markdown auf Bundesanzeiger Bekanntmachungen
 │   │
 │   └── IHK / Kammer erwähnt?
-│       └── → Firecrawl: ihk.de (Brancheninformationen, Pflichtmitgliedschaft)
+│       └── → Bright Data: scrape_as_markdown auf ihk.de (Brancheninformationen, Pflichtmitgliedschaft)
 │
 ├── 2. PRIMÄRQUELLEN ABFRAGEN
 │   │
@@ -124,16 +155,16 @@ Anfrage erhalten
 ├── 3. SEKUNDÄRQUELLEN AKTIVIEREN
 │   │
 │   ├── 3a. Fallback-Kette (gleiche Jurisdiktion, andere Quelle)
-│   │   ├── DE: rechtsinformationen-bund → german-law → ayunis-legal → Firecrawl
-│   │   ├── AT: RIS API → Firecrawl auf ris.bka.gv.at
-│   │   ├── CH: Fedlex SPARQL → Firecrawl auf admin.ch
-│   │   ├── EU: EU Publications SPARQL → EU_compliance_MCP → Firecrawl auf eur-lex
-│   │   ├── USA: Federal Register → GovInfo → open-legal-compliance → Firecrawl
-│   │   └── UAE: Firecrawl auf legislation.ae → tax.gov.ae → difc.ae
+│   │   ├── DE: rechtsinformationen-bund → german-law → ayunis-legal → Bright Data: scrape_as_markdown
+│   │   ├── AT: RIS API → Bright Data: scrape_as_markdown auf ris.bka.gv.at
+│   │   ├── CH: Fedlex SPARQL → Bright Data: scrape_as_markdown auf admin.ch
+│   │   ├── EU: EU Publications SPARQL → EU_compliance_MCP → Bright Data: scrape_as_markdown auf eur-lex
+│   │   ├── USA: Federal Register → GovInfo → open-legal-compliance → Bright Data: scrape_as_markdown
+│   │   └── UAE: Bright Data: scrape_as_markdown auf legislation.ae → tax.gov.ae → difc.ae
 │   │
 │   ├── 3b. Aktualitätscheck (wenn Norm möglicherweise veraltet)
 │   │   ├── Norm zitiert Fassung älter als 1 Jahr?
-│   │   │   └── → Firecrawl auf offizielle Quelle: aktuelle Fassung prüfen
+│   │   │   └── → Bright Data: scrape_as_markdown auf offizielle Quelle: aktuelle Fassung prüfen
 │   │   ├── Steuerrechtliche Norm?
 │   │   │   └── → Prüfen ob Jahressteuergesetz Änderungen brachte
 │   │   └── EU-Verordnung?
@@ -143,7 +174,7 @@ Anfrage erhalten
 │   │   ├── Mehrere Jurisdiktionen betroffen?
 │   │   │   └── → Alle betroffenen Jurisdiktionen parallel abfragen
 │   │   ├── DBA-relevant?
-│   │   │   └── → BMF DBA-Liste via Firecrawl abrufen
+│   │   │   └── → BMF DBA-Liste via Bright Data: scrape_as_markdown abrufen
 │   │   └── EU-Harmonisierung relevant?
 │   │       └── → EU-Richtlinie + nationale Umsetzung prüfen
 │   │
@@ -175,31 +206,74 @@ Anfrage erhalten
 
 | Signal im Kontext | Automatische Aktion | Tool |
 |---|---|---|
-| Jede Person/Firma bei rechtlicher Bewertung | BaFin/FMA/FINMA/ESMA/SEC Warnlisten prüfen | Tier 1→2→3 (siehe regulator-endpoints.md) |
-| Jede Person/Firma bei rechtlicher Bewertung | YouTube, Facebook, Telegram, Instagram, X scannen | Firecrawl + Deep Research |
-| Jede Person/Firma bei rechtlicher Bewertung | Google News / Presseartikel suchen | Deep Research |
-| "Betrug", "Scam", "Warnung", "unseriös" | IOSCO Alerts + alle Aufsichtsbehörden prüfen | Firecrawl |
-| "Telegram", "Gruppe", "Channel", "Community" | Telegram-Channel crawlen + Inhalte sichern | Firecrawl |
-| "Video", "Webinar", "Schulung", "Kurs" | YouTube-Channel des Anbieters prüfen | Firecrawl |
-| "Lizenz", "Genehmigung", "Erlaubnis", "BaFin" | Lizenz bei zuständiger Behörde verifizieren | Tier 1→2→3 (siehe regulator-endpoints.md) |
-| Jeder relevante Fund | Beweismittelsicherung (Volltext + Zeitstempel) | Firecrawl + Write |
-| User-Unterlagen enthalten Behauptungen | Unabhängig gegen öffentliche Quellen verifizieren | Firecrawl + MCPs |
+| Jede Person/Firma bei rechtlicher Bewertung | BaFin/FMA/FINMA/ESMA/SEC Warnlisten prüfen | Bright Data: scrape_as_markdown |
+| Jede Person/Firma bei rechtlicher Bewertung | YouTube → web_data_youtube_channel_search | Bright Data MCP |
+| Jede Person/Firma bei rechtlicher Bewertung | Facebook → web_data_facebook_profile + posts | Bright Data MCP |
+| Jede Person/Firma bei rechtlicher Bewertung | Instagram → web_data_instagram_profile + posts | Bright Data MCP |
+| Jede Person/Firma bei rechtlicher Bewertung | X/Twitter → web_data_twitter_profile + posts | Bright Data MCP |
+| Jede Person/Firma bei rechtlicher Bewertung | TikTok → web_data_tiktok_profile + posts | Bright Data MCP |
+| Jede Person/Firma bei rechtlicher Bewertung | LinkedIn → web_data_linkedin_person/company | Bright Data MCP |
+| Jede Person/Firma bei rechtlicher Bewertung | Google News / Presseartikel | Bright Data: search_engine |
+| Domain / URL bei Verdachtsfällen | ScamAdviser + ScamDetector Trust-Check | Bright Data: scrape_as_markdown |
+| "Telegram", "Gruppe", "Channel", "Community" | scrape_as_markdown auf t.me/s/USERNAME | Bright Data MCP |
+| "Betrug", "Scam", "Warnung", "unseriös" | IOSCO Alerts + alle Aufsichtsbehörden prüfen | Bright Data: scrape_as_markdown |
+| "Video", "Webinar", "Schulung", "Kurs" | YouTube-Channel des Anbieters prüfen | Bright Data: web_data_youtube_* |
+| "Lizenz", "Genehmigung", "Erlaubnis", "BaFin" | Lizenz bei zuständiger Behörde verifizieren | Bright Data: scrape_as_markdown |
+| Jeder relevante Fund | Beweismittelsicherung (Volltext + Zeitstempel) | Bright Data: scrape_as_markdown + Write |
+| User-Unterlagen enthalten Behauptungen | Unabhängig gegen öffentliche Quellen verifizieren | Bright Data MCP + openregister |
 
 ### Kontext-Signale (Schritt 1)
 
 | Signal im Kontext | Automatische Aktion | Tool |
 |---|---|---|
 | Firmenname (GmbH, AG, UG, Ltd, Inc) | Handelsregister-Abfrage | openregister-mcp |
-| Domain / URL | Webseite crawlen + rechtlich prüfen | Firecrawl |
+| Domain / URL | Webseite crawlen + rechtlich prüfen | Bright Data: scrape_as_markdown |
+| Domain / URL | ScamAdviser + ScamDetector Trust-Score abrufen | Bright Data: scrape_as_markdown |
 | PDF als Anhang | Dokument lesen + Typ erkennen | Read tool |
-| "IHK", "Kammer", "Gewerbeanmeldung" | Brancheninfos + Pflichten | Firecrawl auf ihk.de |
-| "Eintragung", "Register" | Relevantes Register identifizieren | openregister-mcp / Firecrawl |
-| "Konkurrent", "Wettbewerber" + Firmenname | Wettbewerber-Daten abrufen | openregister-mcp + Firecrawl |
+| "IHK", "Kammer", "Gewerbeanmeldung" | Brancheninfos + Pflichten | Bright Data: scrape_as_markdown auf ihk.de |
+| "Eintragung", "Register" | Relevantes Register identifizieren | openregister-mcp / Bright Data |
+| "Konkurrent", "Wettbewerber" + Firmenname | Wettbewerber-Daten abrufen | openregister-mcp + Bright Data |
 | Zwei oder mehr Länder erwähnt | Multi-Jurisdiktions-Abfrage | Alle relevanten Quellen |
-| "DBA", "Doppelbesteuerung" | DBA-Text abrufen | Firecrawl auf BMF DBA-Übersicht |
-| "aktuell", "2024", "2025", "neu" | Aktualitätscheck erzwingen | Firecrawl auf offizielle Quelle |
+| "DBA", "Doppelbesteuerung" | DBA-Text abrufen | Bright Data: scrape_as_markdown auf BMF DBA-Übersicht |
+| "aktuell", "2024", "2025", "2026", "neu" | Aktualitätscheck erzwingen | Bright Data: scrape_as_markdown auf offizielle Quelle |
 | "sicher?", "stimmt das?", "zuverlässig?" | Deep Research aktivieren | openrouter-skill-v3 |
 | Strafrecht-Keywords ("Betrug", "Haftung", "Anzeige") | Strafrechtlichen Disclaimer hinzufügen | — |
+
+---
+
+## Bright Data MCP — Tool-Referenz für Social Media
+
+| Plattform | Profil abrufen | Posts abrufen | Suche |
+|---|---|---|---|
+| Instagram | `web_data_instagram_profile` | `web_data_instagram_posts` | — |
+| TikTok | `web_data_tiktok_profile` | `web_data_tiktok_posts` | — |
+| Facebook | `web_data_facebook_profile` | `web_data_facebook_posts` | — |
+| X/Twitter | `web_data_twitter_profile` | `web_data_twitter_posts` | — |
+| LinkedIn (Person) | `web_data_linkedin_person_profile` | — | — |
+| LinkedIn (Firma) | `web_data_linkedin_company_profile` | — | — |
+| YouTube | `web_data_youtube_channel_info` | `web_data_youtube_videos` | `web_data_youtube_channel_search` |
+| Allgemeines Web | `scrape_as_markdown` | — | `search_engine` |
+
+Alle Tools liefern strukturiertes JSON. Kein HTML-Parsing nötig.
+Nur öffentlich zugängliche Daten werden abgerufen (DSGVO/CCPA-konform).
+
+---
+
+## Telegram via Bright Data — Anleitung
+
+Telegram-Channels haben öffentliche Web-Previews unter `t.me/s/USERNAME`.
+Bright Data's `scrape_as_markdown` rendert diese vollständig und gibt Markdown zurück.
+
+```
+URL-Muster:  https://t.me/s/{USERNAME}
+Tool:        scrape_as_markdown
+Ergebnis:    ~20 neueste Nachrichten als strukturierter Markdown
+
+Limitierung: Keine automatische Pagination — maximal ~20 Nachrichten pro Request.
+Workaround:  Für tiefere Analyse → telegram-scroll-loop.md (Browser-basiert).
+```
+
+Keine zusätzlichen API-Keys nötig — läuft über den bestehenden Bright Data Token.
 
 ---
 
@@ -211,7 +285,8 @@ Anfrage erhalten
 |---|---|---|
 | Gesetzestexte (MCP) | 24 Stunden | Bei nächster Abfrage neu laden |
 | API-Ergebnisse (RIS, Federal Register) | Live | Immer frisch (kein Cache) |
-| Crawl-Ergebnisse (Firecrawl) | 1 Stunde | Bei erneuter Abfrage neu crawlen |
+| Bright Data Social Media Scrapes | 1 Stunde | Bei erneuter Abfrage neu laden |
+| Telegram OSINT Ergebnisse | 30 Minuten | Bei erneuter Abfrage neu laden |
 | Deep Research Ergebnisse | Session | Nicht cachen (zu individuell) |
 | Handelsregister-Daten | 7 Tage | Bei erneuter Abfrage prüfen |
 
