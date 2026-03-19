@@ -1,11 +1,12 @@
 ---
 name: strategie-entwurf
 description: |
-  Starte eine strategische Analyse oder Unternehmensberatung mit Validierung.
-  Orchestriert den vollständigen Workflow: Analyse → Validierung → Disclaimer → Speichern.
-  Verwende diesen Skill wenn der User explizit eine Strategieanalyse starten will.
-  Trigger: "/strategie-entwurf", "Strategieanalyse starten", "strategische Analyse",
-  "Strategie entwickeln", "Business Plan erstellen", "Marktanalyse starten".
+  Orchestriert eine vollständige strategische Analyse mit Multi-Agent-Workflow.
+  Workflow: Strategie-Consultant-Agent → Validator-Agent → Disclaimer → Speichern in docs/.
+  Verwende diesen Skill NUR wenn der User explizit eine vollständige Strategieanalyse starten will.
+  Für einfache Strategiefragen ohne Orchestrierung → beratung-strategie verwenden.
+  Trigger: "/strategie-entwurf", "Strategieanalyse starten", "strategische Analyse durchführen",
+  "Strategie entwickeln lassen", "Business Plan erstellen lassen", "Marktanalyse starten".
 allowed-tools:
   - Read
   - Grep

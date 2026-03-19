@@ -2,8 +2,10 @@
 name: beratung-strategie
 description: |
   Strategische Unternehmensberatung mit Marktintelligenz und Benchmarking.
-  Verwende diesen Skill wenn der User nach strategischen Analysen,
-  Marktrecherchen, Wettbewerbsanalysen oder Geschäftsmodellen fragt.
+  Verwende diesen Skill für strategische Analysen, Marktrecherchen,
+  Wettbewerbsanalysen oder Geschäftsmodelle.
+  NICHT verwenden für: steuerrechtliche Analysen, Steuerberechnungen, DBA-Fragen.
+  Für vollständige orchestrierte Strategieanalyse mit Validierung → /strategie-entwurf verwenden.
   Trigger: "Strategie", "Marktanalyse", "Wettbewerbsanalyse", "SWOT",
   "Geschäftsmodell", "Business Plan", "Markteintritt", "Due Diligence",
   "Benchmarking", "KPI", "Skalierung", "strategische Beratung",

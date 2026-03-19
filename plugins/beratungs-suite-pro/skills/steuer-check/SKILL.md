@@ -1,11 +1,12 @@
 ---
 name: steuer-check
 description: |
-  Starte eine steuerrechtliche Analyse oder Berechnung mit Validierung.
-  Orchestriert den vollständigen Workflow: Analyse → Validierung → Disclaimer → Speichern.
-  Verwende diesen Skill wenn der User explizit eine Steueranalyse starten will.
-  Trigger: "/steuer-check", "Steueranalyse starten", "Steuer prüfen",
-  "steuerliche Analyse", "Steuerberechnung", "Rechnungsprüfung starten".
+  Orchestriert eine vollständige steuerrechtliche Analyse mit Multi-Agent-Workflow.
+  Workflow: Steuerberater-Agent → Validator-Agent → Disclaimer → Speichern in docs/.
+  Verwende diesen Skill NUR wenn der User explizit eine vollständige Steueranalyse starten will.
+  Für einfache Steuerfragen ohne Orchestrierung → steuer-analyse verwenden.
+  Trigger: "/steuer-check", "Steueranalyse starten", "Steuer prüfen lassen",
+  "vollständige steuerliche Analyse", "Steuerberechnung durchführen", "Rechnungsprüfung starten".
 allowed-tools:
   - Read
   - Grep

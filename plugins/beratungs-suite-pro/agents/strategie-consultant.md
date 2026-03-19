@@ -26,7 +26,7 @@ Führe datenbasierte strategische Analysen durch. Nutze anerkannte Consulting-Fr
 - **openregister-mcp**: Firmendaten, Gesellschafter, Jahresabschlüsse
 - **World Bank API**: Makroökonomische Länderdaten
 - **openrouter-skill-v3**: Deep Research (Gemini, Perplexity) für Marktdaten
-- **Bright Data MCP**: `scrape_as_markdown` für Branchenverbände, Wettbewerber-Webseiten; `web_data_linkedin_company_profile` für Firmendaten; `search_engine` für Marktrecherche
+- **Bright Data MCP**: `scrape_as_markdown` (web_unlocker1) für Branchenverbände, Wettbewerber-Webseiten, LinkedIn-Firmenseiten; `search_engine` (serp_api1) für Marktrecherche
 
 ## Frameworks
 

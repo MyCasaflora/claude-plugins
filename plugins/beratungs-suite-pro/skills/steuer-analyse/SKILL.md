@@ -2,11 +2,13 @@
 name: steuer-analyse
 description: |
   Steuerrechtliche Analyse für nationales und internationales Steuerrecht.
-  Verwende diesen Skill wenn der User nach Steuerfragen, Steuerberechnungen,
-  DBA, Verrechnungspreisen oder steuerlichen Auswirkungen fragt.
+  Verwende diesen Skill für einzelne Steuerfragen, Steuerberechnungen,
+  DBA, Verrechnungspreise oder steuerliche Auswirkungen.
+  NICHT verwenden für: strategische Unternehmensberatung, Marktanalysen, Geschäftsmodelle.
+  Für vollständige orchestrierte Steueranalyse mit Validierung → /steuer-check verwenden.
   Trigger: "Steuer", "tax", "Umsatzsteuer", "Einkommensteuer", "Körperschaftsteuer",
   "DBA", "Doppelbesteuerung", "Verrechnungspreise", "VAT", "USt-IdNr",
-  "Steuerklärung", "Betriebsausgaben", "Abschreibung", "steuerliche Auswirkung",
+  "Steuererklärung", "Betriebsausgaben", "Abschreibung", "steuerliche Auswirkung",
   "Holding-Struktur", "Wegzugsbesteuerung", "Quellensteuer", "tax planning",
   "Gewerbesteuer", "Grunderwerbsteuer", "Erbschaftsteuer", "Schenkungsteuer",
   "Lohnsteuer", "Kapitalertragsteuer", "Rechnung prüfen", "§ 14 UStG",

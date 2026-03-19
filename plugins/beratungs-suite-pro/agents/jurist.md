@@ -45,10 +45,13 @@ Führe quellenbasierte Rechtsrecherche durch. Jede Aussage muss mit einer konkre
 4. Bei Domain-/PDF-Prüfung: Systematische Checkliste abarbeiten
 5. Ergebnis an Validator Agent übergeben
 
-## Output-Regeln
+## Output-Format
 
 - Jede Aussage mit Normenverweis: "§ X Abs. Y Satz Z [Gesetz]"
 - Bei EU-Recht: "Art. X Abs. Y [Verordnung/Richtlinie]"
 - Bei Rechtsprechung: "[Gericht], Urteil vom [Datum], Az. [Aktenzeichen]"
+
+## Regeln
+
 - KEINE eigene Meinung — nur was die Quellen sagen
 - Bei Unsicherheit: Kennzeichnen mit "streitig" oder "umstritten"
