@@ -1,4 +1,4 @@
-# Beratungs-Suite Pro v0.6.2
+# Beratungs-Suite Pro v0.6.3
 
 Integriertes Claude Code Plugin für **Recht**, **Steuern** und **Unternehmensberatung** mit Ermittlungs-Framework, Agent-Team-Modus, autonomer OSINT-Recherche, Multi-Source-Validierung, Confidence-Scoring und Disclaimer-Enforcement.
 
@@ -11,6 +11,13 @@ Die Beratungs-Suite Pro vereint drei professionelle Beratungssäulen in einem Pl
 1. **Recht** — Rechtsrecherche über DE, AT, CH, EU, USA, UAE mit Domain- und PDF-Prüfung
 2. **Steuern** — Steuerrechtliche Analyse, Rechnungsprüfung, DBA-Analyse, Steuerberechnung
 3. **Unternehmensberatung** — Strategische Analyse, Marktintelligenz, Benchmarking mit Consulting-Frameworks
+
+### Neu in v0.6.3: Error-Recovery, Template-Frontmatter, Tool-Standardisierung
+
+- **Fehlerbehandlung in Orchestrator-Skills**: `recht-analyse`, `steuer-check`, `strategie-entwurf` haben jetzt Fallback-Tabellen (MCP-Ausfall → Bright Data → Deep Research → Confidence-Absenkung)
+- **Template-Frontmatter**: `legal-memo.md`, `tax-analysis.md`, `strategy-report.md` haben jetzt YAML-Frontmatter mit Pflichtfeldern und Verwendungszweck
+- **Agent-Tool-Referenzen**: Jurist + Strategie-Consultant referenzieren jetzt Bright Data MCP statt Firecrawl
+- **requirements.txt**: Python-Abhängigkeiten für Scripts dokumentiert
 
 ### Neu in v0.6.2: Plugin-Audit — Strukturbereinigung + Qualitätsverbesserungen
 
@@ -386,6 +393,7 @@ MIT
 
 ## Changelog
 
+- **v0.6.3** — Error-Recovery + Templates: Fallback-Tabellen in Orchestrator-Skills, Template-Frontmatter, Agent-Tool-Referenzen auf Bright Data, requirements.txt
 - **v0.6.2** — Plugin-Audit: Hooks gefixt (Notification→Stop), 5 Legacy-Commands gelöscht, Agent-Modelle optimiert (steuerberater/validator→Sonnet), Kernlogik v2 mit Referenzen auf alle v0.6.0 Module, Ermittler-Description mit Bright Data Tools, Experimental Scripts bereinigt
 - **v0.6.1** — Bright Data MCP + Telegram OSINT MCP: Bright Data `@brightdata/mcp` als Social-Media-OSINT-Backend (Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube — strukturiertes JSON statt HTML-Parsing), Custom Telegram OSINT MCP Server via Telethon MTProto API (4 Tools: Channel-Info, Messages, Search, Members), komplett überarbeitete `autonome-recherche.md` mit Bright Data Tool-Zuständigkeits-Matrix, `ermittlungs-framework.md` Plattform-Checkliste auf Bright Data migriert, neues `setup-check.sh` mit API-Key-Validierung und Python-Paket-Checks, `.mcp.json` um brightdata + telegram-osint Server erweitert
 - **v0.6.0** — OSINT Master-Erweiterung: 9 neue Reference-Files (forensik-digitaler-fussabdruck, telegram-scroll-loop, link-hub-affiliate-analyse, actor-loop, taetigkeitskategorisierung, vorsatz-score, gray-area-blind-spot, produkt-tiefenanalyse, normen-matching), Ermittler-Agent Phase 0 Forensik, Jurisdiktions-Mapping Regulatorische Arbitrage Detection (Marktortprinzip + 9 Offshore-Jurisdiktionen), ScamAdviser + ScamDetector als Pflicht-Schritt 0b im Entscheidungsbaum

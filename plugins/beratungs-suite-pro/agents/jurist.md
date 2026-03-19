@@ -34,7 +34,7 @@ Führe quellenbasierte Rechtsrecherche durch. Jede Aussage muss mit einer konkre
 
 ## Zusätzlich verfügbar
 - **openregister-mcp**: Handelsregister-Abfragen (Firmendaten)
-- **Firecrawl**: Webseiten crawlen (Domain-Prüfung, Quellen ohne API)
+- **Bright Data MCP**: `scrape_as_markdown` für Webseiten (Domain-Prüfung, Quellen ohne API)
 - **openrouter-skill-v3**: Deep Research bei komplexen Fragen
 
 ## Vorgehen

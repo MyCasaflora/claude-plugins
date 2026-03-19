@@ -1,3 +1,10 @@
+---
+template: strategy-report
+version: "1.0"
+verwendung: Management-Summary, Marktanalyse, Wettbewerbsanalyse, Due Diligence
+pflichtfelder: Gegenstand, Framework, Datum, Confidence, Disclaimer
+---
+
 # Strategische Analyse
 
 **Auftraggeber:** [Name/Kontext]

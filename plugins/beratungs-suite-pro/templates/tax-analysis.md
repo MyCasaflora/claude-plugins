@@ -1,3 +1,10 @@
+---
+template: tax-analysis
+version: "1.0"
+verwendung: Steuerliche Stellungnahme, Steuerberechnung, Rechnungsprüfung, DBA-Analyse
+pflichtfelder: Sachverhalt, Steuerart, Jurisdiktion, Datum, Confidence, Disclaimer
+---
+
 # Steuerliche Stellungnahme
 
 **Sachverhalt:** [Zusammenfassung]

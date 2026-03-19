@@ -68,6 +68,19 @@ Management-Summary mit:
 - Disclaimer (gemäß `${CLAUDE_PLUGIN_ROOT}/references/disclaimer-system.md`)
 - Dateipfad zum gespeicherten Dokument
 
+## Fehlerbehandlung
+
+Wenn ein Schritt fehlschlägt, NICHT abbrechen — stattdessen:
+
+| Fehler | Fallback |
+|--------|----------|
+| Bright Data nicht verfügbar | openrouter-skill-v3 Deep Research für Marktdaten |
+| Keine Marktdaten gefunden | Framework trotzdem anwenden mit verfügbaren Infos + "Datenlücke" markieren |
+| Agent-Team-Spawn fehlschlägt | Auf Subagent-Modus zurückfallen |
+| Wettbewerberdaten unvollständig | Verfügbare Daten nutzen + "Empfehlung: weitere Recherche" |
+
+Bei jedem Fallback: Im Output dokumentieren welcher Schritt nicht regulär lief.
+
 ## Referenzen
 
 - `${CLAUDE_PLUGIN_ROOT}/skills/beratung-strategie/SKILL.md` — Strategie-Logik

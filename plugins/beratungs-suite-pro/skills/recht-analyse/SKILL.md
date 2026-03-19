@@ -73,6 +73,20 @@ Strukturiertes Rechtsgutachten mit:
 - Disclaimer (gemäß `${CLAUDE_PLUGIN_ROOT}/references/disclaimer-system.md`)
 - Dateipfad zum gespeicherten Dokument
 
+## Fehlerbehandlung
+
+Wenn ein Schritt fehlschlägt, NICHT abbrechen — stattdessen:
+
+| Fehler | Fallback |
+|--------|----------|
+| MCP-Server nicht erreichbar | Bright Data `scrape_as_markdown` auf offizielle Quelle |
+| Bright Data nicht verfügbar | openrouter-skill-v3 Deep Research als Ersatz |
+| Keine Quellen gefunden | Confidence auf "SEHR NIEDRIG" setzen, User informieren |
+| Agent-Team-Spawn fehlschlägt | Auf Subagent-Modus zurückfallen |
+| Validator nicht verfügbar | Manuelle Confidence-Schätzung + erweiterten Disclaimer verwenden |
+
+Bei jedem Fallback: Im Output dokumentieren welcher Schritt nicht regulär lief.
+
 ## Referenzen
 
 - `${CLAUDE_PLUGIN_ROOT}/skills/recht-recherche/SKILL.md` — Recherche-Logik

@@ -1,3 +1,10 @@
+---
+template: legal-memo
+version: "1.0"
+verwendung: Rechtsgutachten, Rechtliche Einschätzung, Domain-Prüfung
+pflichtfelder: Sachverhalt, Jurisdiktion, Datum, Confidence, Disclaimer
+---
+
 # Rechtliche Einschätzung
 
 **Sachverhalt:** [Zusammenfassung der Fragestellung]
