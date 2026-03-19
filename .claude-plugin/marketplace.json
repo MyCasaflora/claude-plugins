@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "MyCasaflora-plugins",
+  "version": "1.0.0",
+  "description": "Private Plugin Marketplace — beratungs-suite-pro, landingpage-audit-pro",
+  "owner": {
+    "name": "bp"
+  },
+  "plugins": [
+    {
+      "name": "beratungs-suite-pro",
+      "description": "Integrierte Unterstützung für Recht, Steuern und Unternehmensberatung mit autonomer Recherche über DE/AT/CH/EU/USA/UAE",
+      "source": "./plugins/beratungs-suite-pro",
+      "category": "productivity"
+    },
+    {
+      "name": "landingpage-audit-pro",
+      "description": "Vollautomatisiertes Landing-Page-Audit über 8 Dimensionen: Performance, Accessibility, SEO, Links, Content, Rechtliches, CRO-Psychologie und Visual Design",
+      "source": "./plugins/landingpage-audit-pro",
+      "category": "productivity"
+    }
+  ]
+}
