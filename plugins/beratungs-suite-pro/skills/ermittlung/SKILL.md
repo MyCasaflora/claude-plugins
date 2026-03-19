@@ -62,6 +62,27 @@ Team arbeitet autonom mit Review-Loop:
 Umfassender Ermittlungsbericht wird in `${CLAUDE_PLUGIN_ROOT}/docs/analysen/` gespeichert.
 Format gemäß `${CLAUDE_PLUGIN_ROOT}/references/docs-output.md`.
 
+### Schritt 6: Perspektiven-Checkpoint
+
+Nach dem Speichern des Ermittlungsberichts wird IMMER dieser Schritt ausgeführt.
+
+Lies `${CLAUDE_PLUGIN_ROOT}/references/perspektiven-auswahl.md`.
+
+Zeige dem User die drei Perspektiven-Optionen:
+
+```
+Die Ermittlung ist abgeschlossen. Der Bericht wurde gespeichert.
+
+Aus welcher Perspektive soll der Umsetzungsplan erstellt werden?
+
+  [1] SCHUTZSEITE — Ich bin betroffen oder prüfe für eine betroffene Person
+  [2] SELBSTPRÜFUNG — Ich bin selbst Teil des untersuchten Systems
+  [3] PRÜFAUFTRAG — Ich handle im Auftrag Dritter (Investor, Anwalt, Redaktion)
+```
+
+Warte auf Antwort. Dann Skill `umsetzungsplan` mit der gewählten Perspektive aktivieren.
+Übergib: Pfad zum Ermittlungsbericht + gewählte Perspektive.
+
 ## Referenzen
 
 - `${CLAUDE_PLUGIN_ROOT}/references/ermittlungs-framework.md` — Team-Zusammensetzungen
@@ -69,3 +90,4 @@ Format gemäß `${CLAUDE_PLUGIN_ROOT}/references/docs-output.md`.
 - `${CLAUDE_PLUGIN_ROOT}/references/kernlogik.md` — 10-Phasen-Durchlauf
 - `${CLAUDE_PLUGIN_ROOT}/references/confidence-scoring.md` — Scoring-Algorithmus
 - `${CLAUDE_PLUGIN_ROOT}/references/docs-output.md` — Speicherkonvention
+- `${CLAUDE_PLUGIN_ROOT}/references/perspektiven-auswahl.md` — Perspektiven-Checkpoint

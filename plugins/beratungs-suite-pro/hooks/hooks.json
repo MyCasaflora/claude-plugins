@@ -12,6 +12,18 @@
         "description": "Loggt Umsetzungsplan-Aktivitäten wenn im Output erwähnt",
         "matcher": ".*umsetzungsplan.*",
         "command": "echo \"$(date '+%Y-%m-%d %H:%M') — Umsetzungsplan erstellt/aktualisiert\" >> ${CLAUDE_PLUGIN_ROOT}/docs/.activity-log.txt"
+      },
+      {
+        "type": "prompt",
+        "description": "Perspektiven-Check: Prüft ob nach Analyse-Abschluss der Perspektiven-Checkpoint erscheint",
+        "matcher": ".*Ermittlungsbericht.*gespeichert.*|.*Analyse.*abgeschlossen.*",
+        "prompt": "Prüfe die letzte Antwort. Falls sie einen abgeschlossenen Ermittlungs- oder Analysebericht meldet: Wurde dem User die Perspektiven-Auswahl (Schutzseite / Selbstprüfung / Prüfauftrag) angeboten? Wenn NEIN → antworte: 'PERSPEKTIVEN-CHECK FEHLT: Bitte führe den Checkpoint aus references/perspektiven-auswahl.md aus, bevor der Umsetzungsplan erstellt wird.' Wenn JA oder wenn kein Bericht abgeschlossen wurde → antworte nur: pass"
+      },
+      {
+        "type": "command",
+        "description": "Loggt Diagramm-Exports wenn mmdc ausgeführt wurde",
+        "matcher": ".*mmdc.*\\.png.*|.*mmdc.*\\.pdf.*",
+        "command": "echo \"$(date '+%Y-%m-%d %H:%M') — Diagramm exportiert\" >> ${CLAUDE_PLUGIN_ROOT}/docs/.activity-log.txt"
       }
     ],
     "PreToolUse": [

@@ -236,6 +236,10 @@ Kern-Elemente:
 
 **Was**: Konkrete, priorisierte Handlungsempfehlungen mit Zuständigkeit, Fristen und Hilfsmitteln.
 
+**Perspektiven-Checkpoint ZUERST** (PFLICHT vor Planerstellung):
+Zeige dem User die drei Perspektiven aus `references/perspektiven-auswahl.md`.
+Warte auf Antwort. Dann Umsetzungsplan mit der gewählten Perspektive erstellen.
+
 Lies `references/massnahmenplan.md` für die Basis-Logik.
 Für eigenständige Umsetzungspläne (Standalone oder nach Analyse): Lies `references/umsetzungsplan.md`.
 Verwende `templates/umsetzungsplan-template.md` als Template.

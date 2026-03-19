@@ -3,8 +3,8 @@ name: umsetzungsplan
 description: |
   Erstellt konkrete, priorisierte Umsetzungspläne aus Analyseergebnissen.
   Verwandelt Findings aus Recht, Steuer, Strategie oder Ermittlung in einen
-  Schritt-für-Schritt-Aktionsplan mit 6 Pflichtfeldern pro Maßnahme
-  (Was/Warum/Wer/Frist/Womit/Erfolgskriterium), Fortschritts-Tracking und Kosten.
+  Schritt-für-Schritt-Aktionsplan mit 5 Pflichtfeldern pro Maßnahme
+  (Was/Warum/Wer/Frist/Womit), Perspektiven-Auswahl und Fortschritts-Tracking.
   Trigger: "/umsetzungsplan", "Umsetzungsplan erstellen", "Aktionsplan",
   "Maßnahmenplan erstellen", "Was muss ich jetzt tun", "konkrete Schritte",
   "Handlungsplan", "To-Do-Liste aus Analyse", "Findings umsetzen",
@@ -21,6 +21,18 @@ allowed-tools:
   - WebFetch
   - WebSearch
 ---
+
+## Perspektiven-Eingang
+
+Dieser Skill kann mit einer vorgewählten Perspektive aufgerufen werden:
+- `perspektive=schutzseite` → Perspektive 1 direkt
+- `perspektive=selbstpruefung` → Perspektive 2 direkt
+- `perspektive=pruefauftrag` → Perspektive 3 direkt
+
+Falls keine Perspektive übergeben wurde und Findings vorliegen:
+Checkpoint aus `references/perspektiven-auswahl.md` ausführen.
+
+Falls keine Perspektive und keine Findings: User nach beidem fragen.
 
 # Umsetzungsplan — Findings in konkrete Aktionspläne übersetzen
 
@@ -112,16 +124,23 @@ Spezialisten arbeiten PARALLEL. Umsetzungsplaner wartet und synthetisiert danach
 Lies `${CLAUDE_PLUGIN_ROOT}/references/umsetzungsplan.md` für die vollständige Planlogik.
 Verwende `${CLAUDE_PLUGIN_ROOT}/templates/umsetzungsplan-template.md` als Dokumentstruktur.
 
-### 6 Pflichtfelder pro Maßnahme:
+### 5 Pflichtfelder pro Maßnahme (KEINE Kostenschätzungen):
 
 | Feld | Beschreibung | Beispiel |
 |------|-------------|---------|
 | **Was** | Konkrete Handlung (Imperativ) | "Strafanzeige bei StA München einreichen" |
-| **Warum** | Rechtliche/strategische Begründung | "Verdacht auf § 264a StGB, Beweislage A" |
+| **Warum** | Rechtliche Begründung in einem Satz | "Verdacht auf §264a StGB, Beweislage A" |
 | **Wer** | Verantwortlicher | "Fachanwalt Kapitalmarktrecht" |
 | **Bis wann** | Konkretes Datum | "Bis 15.04.2026 (Verjährung droht)" |
-| **Womit** | Links, Dokumente, Kosten | "bafin.de/beschwerde, Kosten: ~0€" |
-| **Erfolgskriterium** | Woran erkennt man "done"? | "Eingangsbestätigung der StA liegt vor" |
+| **Womit** | Direktlinks, Dokumente, Ressourcen | "bafin.de/beschwerde, Formular XY" |
+
+Keine Kostenschätzungen. Kosten variieren je nach Einzelfall zu stark
+um hilfreiche Angaben zu machen — das ist Sache des beauftragten Anwalts.
+
+### Perspektiven-spezifische Maßnahmentypen:
+
+Lies `${CLAUDE_PLUGIN_ROOT}/references/perspektiven-auswahl.md` für die
+vollständige Logik welche Maßnahmen in welcher Perspektive erscheinen.
 
 ### Verbotene Formulierungen:
 - "Konsultieren Sie einen Anwalt"
@@ -152,6 +171,18 @@ Verwende YAML-Frontmatter gemäß Template.
 
 ---
 
+## Schritt 6: Diagramme exportieren
+
+Für jeden Umsetzungsplan das Abhängigkeits-Sequenz-Diagramm exportieren.
+Lies `${CLAUDE_PLUGIN_ROOT}/references/visualisierung-export.md` für
+die vollständige Export-Prozedur.
+
+Exportierte Dateien werden in
+`${CLAUDE_PLUGIN_ROOT}/docs/analysen/visuals/` gespeichert und im
+Markdown-Dokument referenziert.
+
+---
+
 ## Referenzen
 
 - `${CLAUDE_PLUGIN_ROOT}/references/umsetzungsplan.md` — Planlogik & Entscheidungsregeln
@@ -160,3 +191,5 @@ Verwende YAML-Frontmatter gemäß Template.
 - `${CLAUDE_PLUGIN_ROOT}/references/eskalationspfade.md` — Eskalationsstufen
 - `${CLAUDE_PLUGIN_ROOT}/references/disclaimer-system.md` — Disclaimer-Texte
 - `${CLAUDE_PLUGIN_ROOT}/templates/umsetzungsplan-template.md` — Dokumentstruktur
+- `${CLAUDE_PLUGIN_ROOT}/references/perspektiven-auswahl.md` — Perspektiven-Logik
+- `${CLAUDE_PLUGIN_ROOT}/references/visualisierung-export.md` — Diagramm-Export

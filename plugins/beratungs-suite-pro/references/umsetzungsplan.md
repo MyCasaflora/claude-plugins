@@ -176,21 +176,89 @@ User kann jederzeit den Status melden:
 
 ---
 
-## Kosten-Kalkulation
+## Update-Mechanismus: Plan aktualisieren
 
-Für JEDE Maßnahme eine Kostenschätzung (auch 0€):
+### Trigger-Phrasen (erkennt Claude automatisch):
 
-| Maßnahme | Typische Kosten |
-|---------|----------------|
-| Strafanzeige bei StA/Polizei | 0€ |
-| Aufsichtsbeschwerde BaFin/FMA | 0€ |
-| Anwaltliche Erstberatung (Kapitalmarktrecht) | 190-250€ (oft kostenlos) |
-| Abmahnung (anwaltlich) | 500-3.000€ (nach RVG) |
-| Einstweilige Verfügung | 1.000-5.000€ |
-| Zivilklage 10.000€ Streitwert | ~3.200€ bei Verlust |
-| Steuerberater Erstberatung | 150-300€/h |
-| Selbstanzeige mit Steuerberater | 2.000-10.000€ (je Komplexität) |
-| Mediation | 150-300€/h |
+```
+"Schritt [X] ist erledigt"
+"[Maßnahme] habe ich abgeschlossen"
+"[X] ist fertig"
+"Update: [was passiert ist]"
+"Neues: [Information]"
+"/plan-update"
+```
 
-Wenn Rechtsschutzversicherung vorhanden: Immer prüfen ob abgedeckt.
-Wenn Prozesskostenhilfe möglich: Bei geringem Einkommen immer erwähnen.
+### Vorgehen bei Update-Anfrage:
+
+1. Plan-Datei einlesen:
+   `Glob("${CLAUDE_PLUGIN_ROOT}/docs/analysen/*-umsetzungsplan-*.md")`
+   → Neueste Datei identifizieren (oder User nach Pfad fragen)
+
+2. Status aktualisieren:
+   - Erledigte Maßnahme: `✗` → `✓`
+   - Neu begonnene Maßnahme: `✗` → `◷`
+   - Blockierte Maßnahme: `✗` → `⊘` (mit Begründung)
+
+3. Neue Erkenntnisse einarbeiten:
+   - Wenn Update neue Funde enthält (z.B. "BaFin hat geantwortet"):
+     → Als neue Maßnahmen-Zeile einfügen in die passende Prioritätsstufe
+   - Wenn Update eine Maßnahme obsolet macht:
+     → Status auf `—` (Irrelevant geworden) mit Begründung
+
+4. Nächste kritische Frist neu berechnen:
+   → YAML-Frontmatter `nächste-frist` aktualisieren
+   → `⏰ Nächste kritische Frist` Zeile aktualisieren
+
+5. Datei speichern (gleicher Pfad, Datum in Frontmatter auf heute setzen)
+
+6. Zusammenfassung ausgeben:
+   "Plan aktualisiert. Noch offene Schritte: [N]. Nächste Frist: [Datum]."
+
+---
+
+## Monitoring-Eskalation: Wenn beim Monitoring ein Treffer gefunden wird
+
+### Wann dieser Trigger aktiv ist:
+
+Laufende Maßnahmen (🔵) beinhalten Monitoring-Aufgaben wie:
+- BaFin/FMA-Warnliste auf neuen Eintrag prüfen
+- Handelsregister auf Änderungen prüfen
+- ScamAdviser/ScamDetector Score-Änderungen
+- Google Alerts auf neue Treffer
+
+### Verhalten bei Monitoring-Treffer:
+
+1. Treffer dokumentieren (URL, Datum, Inhalt)
+
+2. Eskalationsstufe bestimmen:
+   | Treffer-Typ | Eskalation |
+   |------------|-----------|
+   | Neue BaFin/FMA-Warnung | SOFORT → Plan um neue Sofort-Maßnahme erweitern |
+   | Handelsregisteränderung (GF-Wechsel, Sitzverlegung) | Kurzfristig → Actor Loop neu ausführen |
+   | ScamAdviser Score stark gefallen | Kurzfristig → Prüfung wiederholen |
+   | Neue Pressemeldung / Ermittlungsverfahren bekannt | SOFORT → Plan überarbeiten |
+   | Google Alert — neuer Schadensfall öffentlich | Kurzfristig → Beweise sichern |
+
+3. User sofort informieren mit konkretem Hinweis:
+   "Monitoring-Treffer: [Beschreibung]. Der Umsetzungsplan sollte
+   angepasst werden. Soll ich die neue Maßnahme sofort einarbeiten?"
+
+4. Plan aktualisieren (wie Update-Mechanismus oben)
+
+---
+
+## Kosten-Hinweis
+
+Kostenschätzungen werden in Umsetzungsplänen NICHT angegeben.
+Reale Kosten hängen vom konkreten Einzelfall, der Region, der
+gewählten Kanzlei und dem Verfahrensausgang ab — pauschale
+Angaben wären irreführend.
+
+Was stattdessen im Plan steht:
+- Ob eine Maßnahme grundsätzlich kostenfrei ist (BaFin-Beschwerde,
+  Strafanzeige) oder kostenpflichtig (Anwalt, Gericht)
+- Wo der User konkrete Informationen zu Kosten bekommt (Erstgespräch
+  mit Anwalt, RVG-Rechner, Gerichtskostenrechner)
+- Ob Rechtsschutzversicherung oder Prozesskostenhilfe grundsätzlich
+  in Frage kommen könnte — ohne Höhenangabe

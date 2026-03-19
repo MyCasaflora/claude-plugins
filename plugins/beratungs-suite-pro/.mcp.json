@@ -16,9 +16,9 @@
       "description": "Handelsregister-Abfragen (DE)"
     },
     "brightdata": {
-      "type": "streamable-http",
-      "url": "https://mcp.brightdata.com/mcp?token=${BRIGHTDATA_API_TOKEN}",
-      "description": "Bright Data Web MCP: scrape_as_markdown, search_engine, scrape_batch, search_engine_batch. Transport: Streamable HTTP (POST)."
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.brightdata.com/sse?token=${BRIGHTDATA_API_TOKEN}"],
+      "description": "Bright Data Web MCP: scrape_as_markdown, search_engine, scrape_batch, search_engine_batch"
     },
     "ayunis-legal": {
       "command": "python3",

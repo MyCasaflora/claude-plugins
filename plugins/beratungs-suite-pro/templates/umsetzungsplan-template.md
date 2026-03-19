@@ -6,6 +6,7 @@ basiert-auf: [Pfad zur Quell-Analyse ODER "externe Findings"]
 domänen: [recht|steuer|strategie|kombiniert]
 konfidenz-basis: [0-100 ODER "extern"]
 nächste-frist: YYYY-MM-DD
+perspektive: schutzseite | selbstpruefung | pruefauftrag
 status: aktiv
 ---
 
@@ -16,7 +17,6 @@ status: aktiv
 [Max. 5 Sätze: Ausgangslage → Top-Risiko → dringendste Frist → empfohlene erste Aktion]
 
 ⏰ **Nächste kritische Frist**: [Datum] — [Was bis dahin passieren muss]
-💰 **Geschätzte Gesamtkosten**: [Bandbreite in €]
 📊 **Basis-Konfidenz**: [Score] ([Label]) — basiert auf [N] Quellen
 
 ---
@@ -94,16 +94,14 @@ flowchart LR
 
 ---
 
-## 💰 Kosten-Übersicht
+## 💡 Ressourcen-Hinweise
 
-| Maßnahme | Geschätzte Kosten | Kostenträger | Rechtsschutz? |
-|---------|------------------|-------------|--------------|
-| [Alle kostenpflichtigen Schritte] | | | |
-| **Gesamt (Minimum)** | **€** | | |
-| **Gesamt (Maximum)** | **€** | | |
-
-**Prozesskostenhilfe**: [Ja/Nein/Prüfen] — [Begründung]
-**Rechtsschutzversicherung**: [Abgedeckt/Nicht abgedeckt/Prüfen]
+| Maßnahme | Grundsätzlich | Wo Kosteninformation holen |
+|---------|--------------|--------------------------|
+| [Kostenfreie Schritte] | Kostenfrei | — |
+| [Kostenpflichtige Schritte] | Kostenpflichtig | Erstgespräch mit [Anwalt-Typ] / [Behörde] |
+| Rechtsschutzversicherung | Prüfen | Eigene Police, Stichwort: [Rechtsgebiet] |
+| Prozesskostenhilfe | Prüfen wenn nötig | Antrag beim zuständigen Gericht |
 
 ---
 
@@ -118,5 +116,5 @@ flowchart LR
 
 ---
 
-*Erstellt: [Datum] | Plugin: beratungs-suite-pro v0.5.0 | Basis: [Analyse-Datei]*
+*Erstellt: [Datum] | Plugin: beratungs-suite-pro | Perspektive: [gewählte Perspektive] | Basis: [Analyse-Datei]*
 *[Disclaimer aus references/disclaimer-system.md]*

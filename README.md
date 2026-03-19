@@ -6,7 +6,7 @@ Privater Plugin-Marketplace für Claude Code.
 
 | Plugin | Version | Beschreibung |
 |--------|---------|-------------|
-| beratungs-suite-pro | 0.6.3 | Integrierte Unterstützung für Recht, Steuern und Unternehmensberatung mit OSINT Master + Bright Data MCP |
+| beratungs-suite-pro | 0.7.0 | Integrierte Unterstützung für Recht, Steuern und Unternehmensberatung |
 | landingpage-audit-pro | 0.2.0 | Vollautomatisiertes Landing-Page-Audit über 8 Dimensionen |
 
 ## Installation

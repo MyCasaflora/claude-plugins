@@ -1,4 +1,4 @@
-# Beratungs-Suite Pro v0.6.3
+# Beratungs-Suite Pro v0.7.0
 
 Integriertes Claude Code Plugin für **Recht**, **Steuern** und **Unternehmensberatung** mit Ermittlungs-Framework, Agent-Team-Modus, autonomer OSINT-Recherche, Multi-Source-Validierung, Confidence-Scoring und Disclaimer-Enforcement.
 
@@ -11,6 +11,16 @@ Die Beratungs-Suite Pro vereint drei professionelle Beratungssäulen in einem Pl
 1. **Recht** — Rechtsrecherche über DE, AT, CH, EU, USA, UAE mit Domain- und PDF-Prüfung
 2. **Steuern** — Steuerrechtliche Analyse, Rechnungsprüfung, DBA-Analyse, Steuerberechnung
 3. **Unternehmensberatung** — Strategische Analyse, Marktintelligenz, Benchmarking mit Consulting-Frameworks
+
+### Neu in v0.7.0: Drei-Perspektiven-System, Compliance-Selbstprüfung, Diagramm-Export
+
+- **Perspektiven-Auswahl (Pflicht-Checkpoint)**: Nach jeder abgeschlossenen Analyse wählt der User eine von drei Perspektiven: SCHUTZSEITE (Betroffener), SELBSTPRÜFUNG (Betreiber/Gründer) oder PRÜFAUFTRAG (Due Diligence für Dritte). Jede Perspektive erzeugt einen grundlegend anderen Umsetzungsplan mit eigener Logik, eigenem Ton und eigenen Maßnahmentypen.
+- **Compliance-Selbstprüfung (4 Module)**: Vollständige Prüflisten für Website/Impressum (§5 DDG), Datenschutz (DSGVO), AGB (§307-309 BGB), Affiliate-Links (§5a UWG) und Unternehmensstruktur-Check (Rechtsform vs. Tätigkeit, Stammkapital, Meldepflichten). Inklusive Entlastungsdokumentation.
+- **Diagramm-Export (PNG + PDF)**: Mermaid-Diagramme werden automatisch als hochauflösende PNG- und PDF-Dateien via `mmdc` exportiert. Fallback auf Mermaid-Code in Markdown.
+- **Update-Mechanismus**: Bestehende Umsetzungspläne können per Trigger-Phrasen ("Schritt X erledigt", "/plan-update") live aktualisiert werden — Status, Fristen und neue Findings werden direkt eingearbeitet.
+- **Monitoring-Eskalation**: Bei Monitoring-Treffern (neue BaFin-Warnung, Handelsregister-Änderung, Presse) wird der Plan automatisch um Sofort-Maßnahmen erweitert.
+- **Kostenschätzungen entfernt**: Pauschale Kostenangaben waren irreführend — stattdessen jetzt Ressourcen-Hinweise (kostenfrei/kostenpflichtig + wo Kosteninformation holen).
+- **Hooks erweitert**: Perspektiven-Check-Hook (Sicherheitsnetz wenn Checkpoint vergessen wird) + Diagramm-Export-Logger.
 
 ### Neu in v0.6.3: Error-Recovery, Template-Frontmatter, Tool-Standardisierung
 
@@ -115,7 +125,7 @@ beratungs-suite-pro/
 │   ├── recht-recherche/SKILL.md       # Rechtsrecherche (alle Jurisdiktionen)
 │   ├── steuer-analyse/SKILL.md        # Steuerrechtliche Analyse
 │   ├── beratung-strategie/SKILL.md    # Strategische Unternehmensberatung
-│   ├── umsetzungsplan/SKILL.md        # Konkreter Aktionsplan aus Findings (NEU v0.5.0)
+│   ├── umsetzungsplan/SKILL.md        # Konkreter Aktionsplan aus Findings (UPD v0.7.0 — Perspektiven)
 │   ├── ermittlung/SKILL.md            # Erzwingt Agent-Team-Modus
 │   ├── recht-analyse/SKILL.md         # Orchestrierter Rechts-Workflow
 │   ├── steuer-check/SKILL.md          # Orchestrierter Steuer-Workflow
@@ -132,18 +142,14 @@ beratungs-suite-pro/
 │   ├── devils-advocate.md             # Dreifach-Prüfungs-Agent
 │   └── umsetzungsplaner.md            # Implementierungs-Planungs-Spezialist (NEU v0.5.0)
 │
-├── commands/                          # Slash-Commands (Legacy + Neu)
-│   ├── umsetzungsplan.md              # /umsetzungsplan — Standalone + nach Analyse (NEU v0.5.0)
-│   ├── ermittlung.md                  # /ermittlung (erzwingt Agent-Team-Modus)
-│   ├── recht-analyse.md               # /recht-analyse
-│   ├── steuer-check.md                # /steuer-check
-│   └── strategie-entwurf.md           # /strategie-entwurf
-│
 ├── hooks/
-│   └── hooks.json                     # Disclaimer-Enforcement, Namensschema, Activity-Log
+│   └── hooks.json                     # Disclaimer-Enforcement, Namensschema, Activity-Log, Perspektiven-Check
 │
 ├── references/                        # Internes Regelwerk
-│   ├── umsetzungsplan.md              # Findings-Aufnahme, Priorisierung, Konflikt-Matrix (NEU v0.5.0)
+│   ├── umsetzungsplan.md              # Findings-Aufnahme, Priorisierung, Konflikt-Matrix (UPD v0.7.0)
+│   ├── perspektiven-auswahl.md        # Drei-Perspektiven-Checkpoint (NEU v0.7.0)
+│   ├── compliance-selbstpruefung.md   # Website/AGB/Affiliate/Struktur-Prüflisten (NEU v0.7.0)
+│   ├── visualisierung-export.md       # Mermaid → PNG/PDF Export via mmdc (NEU v0.7.0)
 │   ├── ermittlungs-framework.md       # Komplexitäts-Erkennung + Team-Zusammensetzungen
 │   ├── autonome-recherche.md          # Entscheidungsbaum + Proaktive Ermittlung (OSINT)
 │   ├── regulator-endpoints.md         # Tier 1-2-3 API-Endpunkte für 8 Behörden (NEU v0.5.1)
@@ -171,7 +177,7 @@ beratungs-suite-pro/
 │   └── ris-austria-query.py           # RIS Österreich API Client
 │
 └── templates/                         # Output-Vorlagen
-    ├── umsetzungsplan-template.md     # 6-Felder-Format + Status-Tracking + Kosten (NEU v0.5.0)
+    ├── umsetzungsplan-template.md     # 5-Felder-Format + Perspektive + Status-Tracking (UPD v0.7.0)
     ├── legal-memo.md                  # Rechtsgutachten-Format
     ├── tax-analysis.md                # Steuerliche Stellungnahme
     ├── gespraechsnotiz.md             # Kompakte Gesprächsnotiz
@@ -393,6 +399,8 @@ MIT
 
 ## Changelog
 
+- **v0.7.0** — Drei-Perspektiven-System: Pflicht-Checkpoint nach Analyse (Schutzseite / Selbstprüfung / Prüfauftrag), 3 neue Reference-Files (perspektiven-auswahl, compliance-selbstpruefung, visualisierung-export), Umsetzungsplan-Skill mit Perspektiven-Parameter + 5-Pflichtfelder (Kosten entfernt), Update-Mechanismus + Monitoring-Eskalation in Planlogik, Diagramm-Export als PNG/PDF via mmdc, Perspektiven-Checkpoint in Kernlogik Phase 9 und Ermittlung Schritt 6, 2 neue Hooks (Perspektiven-Check + Export-Logger), Template-Überarbeitung (Ressourcen-Hinweise statt Kosten-Übersicht)
+- **v0.6.4** — Bright Data MCP Transport Fix (SSE → Streamable HTTP), JSON-Validierung in Stop-Hooks korrigiert
 - **v0.6.3** — Error-Recovery + Templates: Fallback-Tabellen in Orchestrator-Skills, Template-Frontmatter, Agent-Tool-Referenzen auf Bright Data, requirements.txt
 - **v0.6.2** — Plugin-Audit: Hooks gefixt (Notification→Stop), 5 Legacy-Commands gelöscht, Agent-Modelle optimiert (steuerberater/validator→Sonnet), Kernlogik v2 mit Referenzen auf alle v0.6.0 Module, Ermittler-Description mit Bright Data Tools, Experimental Scripts bereinigt
 - **v0.6.1** — Bright Data MCP + Telegram OSINT MCP: Bright Data `@brightdata/mcp` als Social-Media-OSINT-Backend (Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube — strukturiertes JSON statt HTML-Parsing), Custom Telegram OSINT MCP Server via Telethon MTProto API (4 Tools: Channel-Info, Messages, Search, Members), komplett überarbeitete `autonome-recherche.md` mit Bright Data Tool-Zuständigkeits-Matrix, `ermittlungs-framework.md` Plattform-Checkliste auf Bright Data migriert, neues `setup-check.sh` mit API-Key-Validierung und Python-Paket-Checks, `.mcp.json` um brightdata + telegram-osint Server erweitert

@@ -199,3 +199,16 @@ flowchart LR
 3. **Steuerfahnder-Agent**: Erstellt Geldfluss-Diagramm nach Phase 1 (Struktur-Analyse)
 4. **Stratege/Marktanalyst**: Erstellt Marktposition-Mindmap nach Framework-Analyse
 5. **Lead**: Konsolidiert alle Diagramme im Endbericht, prüft auf Konsistenz
+
+---
+
+## Diagramm-Export (PNG + PDF)
+
+Alle Pflicht-Diagramme werden zusätzlich als hochauflösende PNG-
+und PDF-Dateien exportiert.
+
+Für die vollständige Export-Prozedur:
+Lies `${CLAUDE_PLUGIN_ROOT}/references/visualisierung-export.md`
+
+Exportierte Dateien landen in: `docs/analysen/visuals/`
+Dateiname-Schema: `YYYY-MM-DD-[thema]-[diagrammtyp].png/.pdf`
