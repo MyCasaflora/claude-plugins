@@ -1,7 +1,7 @@
 {
   "name": "beratungs-suite-pro",
   "description": "Integrierte Unterstützung für Recht, Steuern und Unternehmensberatung. Autonome Recherche über DE/AT/CH/EU/USA/UAE Rechtsquellen mit Multi-Source-Validierung, Confidence-Scoring und Disclaimer-Enforcement.",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "author": {
     "name": "bp"
   },

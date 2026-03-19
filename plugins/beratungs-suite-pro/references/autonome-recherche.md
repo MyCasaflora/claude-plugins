@@ -6,18 +6,22 @@ Dieses Dokument definiert, wann und wie das Plugin selbständig zusätzliche Inf
 
 ## Tool-Zuständigkeiten (Übersicht)
 
-| Aufgabe | Tool |
-|---|---|
-| Instagram, TikTok, Facebook, X/Twitter, LinkedIn, YouTube | **Bright Data MCP** (`web_data_*` Tools) |
-| Telegram Channels — Nachrichten, Metadaten | **Bright Data MCP** (`scrape_as_markdown` auf `t.me/s/USERNAME`) |
-| Behördenseiten, Handelsregister-Web, Archive.org | **Bright Data MCP** (`scrape_as_markdown` / `web_unlocker`) |
-| Regulierungs-Warnlisten (BaFin, FMA, SEC, …) | **Bright Data MCP** (`scrape_as_markdown`) |
-| Website-Trust-Check (ScamAdviser, ScamDetector) | **Bright Data MCP** (`scrape_as_markdown`) |
-| Google News / Presseartikel | **Bright Data MCP** (`search_engine`) |
-| Deutsche Gesetze | rechtsinformationen-bund / german-law MCPs |
-| Handelsregister-Abfragen (DE) | openregister MCP |
+| Aufgabe | Tool | Bright Data Zone |
+|---|---|---|
+| Social Media Profile (öffentlich) | **Bright Data MCP** (`scrape_as_markdown` via Web Unlocker) | `web_unlocker1` |
+| Telegram Channels — Nachrichten, Metadaten | **Bright Data MCP** (`scrape_as_markdown` auf `t.me/s/USERNAME`) | `web_unlocker1` |
+| Behördenseiten, Handelsregister-Web, Archive.org | **Bright Data MCP** (`scrape_as_markdown`) | `web_unlocker1` |
+| Regulierungs-Warnlisten (BaFin, FMA, SEC, …) | **Bright Data MCP** (`scrape_as_markdown`) | `web_unlocker1` |
+| Website-Trust-Check (ScamAdviser, ScamDetector) | **Bright Data MCP** (`scrape_as_markdown`) | `web_unlocker1` |
+| Google News / Presseartikel / SERP | **Bright Data MCP** (`search_engine`) | `serp_api1` / `serp_api2` |
+| Deutsche Gesetze | rechtsinformationen-bund / german-law MCPs | — |
+| Handelsregister-Abfragen (DE) | openregister MCP | — |
 
-> **Hinweis:** Firecrawl wird für Social Media **nicht mehr verwendet** — es scheitert an Login-Walls aller großen Plattformen. Bright Data MCP löst dieses Problem durch eigene Proxy-Infrastruktur und plattformspezifische Scraper.
+> **Verfügbare Bright Data Zones (Stand 2026-03-19):**
+> - `serp_api1` / `serp_api2` — Google SERP-Abfragen (Suche, News, Bilder)
+> - `web_unlocker1` — Web Unlocker für beliebige Webseiten inkl. Social Media (öffentliche Profile)
+>
+> **Hinweis:** Plattformspezifische Scraper (`web_data_instagram_*`, `web_data_youtube_*` etc.) sind aktuell **nicht als eigene Zones konfiguriert**. Social Media OSINT läuft über `web_unlocker1` + `scrape_as_markdown` auf öffentliche Profil-URLs. Für strukturierte API-Scraper müssen im Bright Data Dashboard zusätzliche Dataset-Zones aktiviert werden.
 
 ---
 
@@ -68,29 +72,30 @@ Anfrage erhalten
 │   ├── 0c. Digitaler Fußabdruck scannen (OSINT)
 │   │   │   Für JEDE beteiligte Person/Firma/Marke:
 │   │   │
-│   │   ├── YouTube → Bright Data: web_data_youtube_channel_search (USERNAME)
-│   │   │            → dann web_data_youtube_channel_info für Details
+│   │   ├── YouTube → Bright Data: scrape_as_markdown auf youtube.com/@USERNAME
+│   │   │            → Öffentliche Kanalseite + Videos-Tab
 │   │   │
-│   │   ├── Facebook → Bright Data: web_data_facebook_profile (URL)
-│   │   │             → web_data_facebook_posts (URL, limit: 50)
+│   │   ├── Facebook → Bright Data: scrape_as_markdown auf facebook.com/USERNAME
+│   │   │             → Nur öffentliche Profile/Seiten (Login-Wall bei privaten)
 │   │   │
 │   │   ├── Telegram → Bright Data: scrape_as_markdown auf t.me/s/USERNAME
 │   │   │              → Gibt ~20 neueste Nachrichten als Markdown zurück
 │   │   │              → Für ältere Nachrichten: mehrere Requests mit Scroll-Offset
 │   │   │
-│   │   ├── Instagram → Bright Data: web_data_instagram_profile (USERNAME)
-│   │   │              → web_data_instagram_posts (USERNAME, limit: 50)
+│   │   ├── Instagram → Bright Data: scrape_as_markdown auf instagram.com/USERNAME
+│   │   │              → Öffentliche Profile (Login-Wall bei privaten)
 │   │   │
-│   │   ├── X/Twitter → Bright Data: web_data_twitter_profile (USERNAME)
-│   │   │              → web_data_twitter_posts (USERNAME, limit: 50)
+│   │   ├── X/Twitter → Bright Data: scrape_as_markdown auf x.com/USERNAME
+│   │   │              → Öffentliche Profile und Tweets
 │   │   │
-│   │   ├── TikTok → Bright Data: web_data_tiktok_profile (USERNAME)
-│   │   │           → web_data_tiktok_posts (USERNAME, limit: 50)
+│   │   ├── TikTok → Bright Data: scrape_as_markdown auf tiktok.com/@USERNAME
+│   │   │           → Öffentliche Profile und Videos
 │   │   │
-│   │   ├── LinkedIn → Bright Data: web_data_linkedin_person_profile (URL)
-│   │   │             → web_data_linkedin_company_profile (URL)
+│   │   ├── LinkedIn → Bright Data: scrape_as_markdown auf linkedin.com/in/USERNAME
+│   │   │             → linkedin.com/company/FIRMENNAME (nur öffentliche Daten)
 │   │   │
 │   │   └── Google News → Bright Data: search_engine (MARKENNAME + "Betrug" ODER "Warnung" ODER "Klage")
+│   │                      → Nutzt Zone: serp_api1 oder serp_api2
 │   │
 │   ├── 0d. Beweismittelsicherung
 │   │   │   Für JEDEN relevanten Fund:
@@ -207,17 +212,17 @@ Anfrage erhalten
 | Signal im Kontext | Automatische Aktion | Tool |
 |---|---|---|
 | Jede Person/Firma bei rechtlicher Bewertung | BaFin/FMA/FINMA/ESMA/SEC Warnlisten prüfen | Bright Data: scrape_as_markdown |
-| Jede Person/Firma bei rechtlicher Bewertung | YouTube → web_data_youtube_channel_search | Bright Data MCP |
-| Jede Person/Firma bei rechtlicher Bewertung | Facebook → web_data_facebook_profile + posts | Bright Data MCP |
-| Jede Person/Firma bei rechtlicher Bewertung | Instagram → web_data_instagram_profile + posts | Bright Data MCP |
-| Jede Person/Firma bei rechtlicher Bewertung | X/Twitter → web_data_twitter_profile + posts | Bright Data MCP |
-| Jede Person/Firma bei rechtlicher Bewertung | TikTok → web_data_tiktok_profile + posts | Bright Data MCP |
-| Jede Person/Firma bei rechtlicher Bewertung | LinkedIn → web_data_linkedin_person/company | Bright Data MCP |
-| Jede Person/Firma bei rechtlicher Bewertung | Google News / Presseartikel | Bright Data: search_engine |
+| Jede Person/Firma bei rechtlicher Bewertung | YouTube → scrape_as_markdown auf youtube.com/@NAME | Bright Data: web_unlocker1 |
+| Jede Person/Firma bei rechtlicher Bewertung | Facebook → scrape_as_markdown auf facebook.com/NAME | Bright Data: web_unlocker1 |
+| Jede Person/Firma bei rechtlicher Bewertung | Instagram → scrape_as_markdown auf instagram.com/NAME | Bright Data: web_unlocker1 |
+| Jede Person/Firma bei rechtlicher Bewertung | X/Twitter → scrape_as_markdown auf x.com/NAME | Bright Data: web_unlocker1 |
+| Jede Person/Firma bei rechtlicher Bewertung | TikTok → scrape_as_markdown auf tiktok.com/@NAME | Bright Data: web_unlocker1 |
+| Jede Person/Firma bei rechtlicher Bewertung | LinkedIn → scrape_as_markdown auf linkedin.com/in/NAME | Bright Data: web_unlocker1 |
+| Jede Person/Firma bei rechtlicher Bewertung | Google News / Presseartikel | Bright Data: serp_api1 |
 | Domain / URL bei Verdachtsfällen | ScamAdviser + ScamDetector Trust-Check | Bright Data: scrape_as_markdown |
 | "Telegram", "Gruppe", "Channel", "Community" | scrape_as_markdown auf t.me/s/USERNAME | Bright Data MCP |
 | "Betrug", "Scam", "Warnung", "unseriös" | IOSCO Alerts + alle Aufsichtsbehörden prüfen | Bright Data: scrape_as_markdown |
-| "Video", "Webinar", "Schulung", "Kurs" | YouTube-Channel des Anbieters prüfen | Bright Data: web_data_youtube_* |
+| "Video", "Webinar", "Schulung", "Kurs" | YouTube-Channel des Anbieters prüfen | Bright Data: scrape_as_markdown (web_unlocker1) |
 | "Lizenz", "Genehmigung", "Erlaubnis", "BaFin" | Lizenz bei zuständiger Behörde verifizieren | Bright Data: scrape_as_markdown |
 | Jeder relevante Fund | Beweismittelsicherung (Volltext + Zeitstempel) | Bright Data: scrape_as_markdown + Write |
 | User-Unterlagen enthalten Behauptungen | Unabhängig gegen öffentliche Quellen verifizieren | Bright Data MCP + openregister |
@@ -241,21 +246,40 @@ Anfrage erhalten
 
 ---
 
-## Bright Data MCP — Tool-Referenz für Social Media
+## Bright Data MCP — Tool-Referenz (aktuelle Zones)
 
-| Plattform | Profil abrufen | Posts abrufen | Suche |
-|---|---|---|---|
-| Instagram | `web_data_instagram_profile` | `web_data_instagram_posts` | — |
-| TikTok | `web_data_tiktok_profile` | `web_data_tiktok_posts` | — |
-| Facebook | `web_data_facebook_profile` | `web_data_facebook_posts` | — |
-| X/Twitter | `web_data_twitter_profile` | `web_data_twitter_posts` | — |
-| LinkedIn (Person) | `web_data_linkedin_person_profile` | — | — |
-| LinkedIn (Firma) | `web_data_linkedin_company_profile` | — | — |
-| YouTube | `web_data_youtube_channel_info` | `web_data_youtube_videos` | `web_data_youtube_channel_search` |
-| Allgemeines Web | `scrape_as_markdown` | — | `search_engine` |
+### Verfügbare Zones
 
-Alle Tools liefern strukturiertes JSON. Kein HTML-Parsing nötig.
-Nur öffentlich zugängliche Daten werden abgerufen (DSGVO/CCPA-konform).
+| Zone | Typ | Einsatz |
+|---|---|---|
+| `web_unlocker1` | Web Unlocker | Beliebige Webseiten, Social Media Profile (öffentlich), Behörden, Archive |
+| `serp_api1` | SERP API | Google-Suche, Google News, Google Images |
+| `serp_api2` | SERP API | Backup/Parallel-SERP (gleiche Funktion wie serp_api1) |
+
+### Social Media via Web Unlocker (scrape_as_markdown)
+
+| Plattform | URL-Muster | Hinweis |
+|---|---|---|
+| Instagram | `instagram.com/USERNAME` | Nur öffentliche Profile; private → Login-Wall |
+| TikTok | `tiktok.com/@USERNAME` | Öffentliche Profile + Videos |
+| Facebook | `facebook.com/USERNAME` | Seiten/Pages öffentlich; persönliche Profile eingeschränkt |
+| X/Twitter | `x.com/USERNAME` | Öffentliche Profile und Tweets |
+| LinkedIn (Person) | `linkedin.com/in/USERNAME` | Sehr eingeschränkt ohne Login |
+| LinkedIn (Firma) | `linkedin.com/company/NAME` | Firmenseiten meist öffentlich |
+| YouTube | `youtube.com/@USERNAME` | Kanalseite + Videos-Tab |
+| Telegram | `t.me/s/USERNAME` | ~20 neueste Channel-Nachrichten |
+
+### SERP via search_engine
+
+| Aufgabe | Query-Muster |
+|---|---|
+| Google News | `MARKENNAME Betrug OR Warnung OR Klage` |
+| Presseartikel | `"FIRMENNAME" site:handelsblatt.de OR site:wiwo.de` |
+| Regulierungswarnungen | `"FIRMENNAME" BaFin OR FMA OR FINMA Warnung` |
+
+> **Limitierungen:** Web Unlocker rendert JavaScript, umgeht Anti-Bot, aber kann Login-Walls nicht überwinden. Für strukturierte Daten (Posts mit Timestamps, Engagement-Metriken) müssten im Bright Data Dashboard zusätzliche **Dataset Collector Zones** aktiviert werden (z.B. `instagram_posts`, `youtube_videos`).
+>
+> Nur öffentlich zugängliche Daten werden abgerufen (DSGVO/CCPA-konform).
 
 ---
 
